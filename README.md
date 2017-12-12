@@ -13,10 +13,10 @@ The tabs component requires HTML markup with this kind of layout and these CSS c
 				<div onclick="moveTo('third')" class="dynamic-tab" id="mst-third">THIRD THING</div>
 				<div onclick="moveTo('fourth')" class="dynamic-tab" id="mst-fourth">FOURTH</div>
 				<div onclick="moveTo('fifth')" class="dynamic-tab" id="mst-fifth">FIVE</div>
-				<div onclick="moveTo('sixth')" class="dynamic-tab" id="mst-sixth">SIX ELEMENT</div>
+				<div onclick="moveTo('sixth')" class="dynamic-tab" id="mst-sixth">ELEMENT SIX</div>
 				<div onclick="moveTo('seventh')" class="dynamic-tab" id="mst-seventh">SEVENTH</div>
 			</nav>
-			<div class="dynamic-tabs-indicator"><div class="mt-indicator-bar"></div></div>
+			<div class="dynamic-tabs-indicator"><div class="dt-indicator-bar"></div></div>
 		</div>
 	<div class="dynamic-tab-arrow arrow-right"><div class="material-icons" aria-label="scroll right">navigate_next</div></div>
 </div>
