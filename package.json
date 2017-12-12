@@ -1,0 +1,25 @@
+{
+  "name": "dynamic-tabs",
+  "version": "1.0.2",
+  "description": "A JavaScript library for tab UI elements, styled (somewhat) by material design principles.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dchenk/dynamic-tabs.git"
+  },
+  "keywords": [
+    "dynamic-tabs",
+    "tabs",
+    "ui",
+    "javascript"
+  ],
+  "author": "Dmitriy Cherchenko (Wider Webs LLC)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dchenk/dynamic-tabs/issues"
+  },
+  "homepage": "https://github.com/dchenk/dynamic-tabs#readme"
+}

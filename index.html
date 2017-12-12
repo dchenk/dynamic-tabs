@@ -1,0 +1,100 @@
+<!DOCTYPE html><html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Tabs</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="./tabs.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"><!-- this icon font used for example only, and you can use anything else -->
+	<style>
+		body {
+			margin: 0;
+			color: #303030;
+		}
+		.spacer {
+			height: 50px;
+			background-color: gainsboro;
+		}
+	</style>
+</head>
+<body>
+
+	<div class="spacer"></div>
+
+	<div id="section-tabs" class="dynamic-tabs">
+		<div class="dynamic-tab-arrow arrow-left"><div class="material-icons" aria-label="scroll left">navigate_before</div></div>
+		<div class="dynamic-tabs-framer">
+			<nav class="dynamic-tabs-list">
+				<div onclick="moveTo('first')" class="dynamic-tab" id="mst-first">FIRST</div>
+				<div onclick="moveTo('second')" class="dynamic-tab" id="mst-second">THE SECOND</div>
+				<div onclick="moveTo('third')" class="dynamic-tab" id="mst-third">THIRD THING</div>
+				<div onclick="moveTo('fourth')" class="dynamic-tab" id="mst-fourth">FOURTH</div>
+				<div onclick="moveTo('fifth')" class="dynamic-tab" id="mst-fifth">FIVE</div>
+				<div onclick="moveTo('sixth')" class="dynamic-tab" id="mst-sixth">ELEMENT SIX</div>
+				<div onclick="moveTo('seventh')" class="dynamic-tab" id="mst-seventh">SEVENTH</div>
+			</nav>
+			<div class="dynamic-tabs-indicator"><div class="mt-indicator-bar"></div></div>
+		</div>
+		<div class="dynamic-tab-arrow arrow-right"><div class="material-icons" aria-label="scroll right">navigate_next</div></div>
+	</div>
+
+	<div class="spacer"></div>
+
+	<a id="refresh">REFRESH</a><br>
+
+	<button onclick="oddTabs()">Odd Tabs</button>
+	<button onclick="evenTabs()">Even Tabs</button>
+	<button onclick="allTabs()">All Tabs</button>
+
+	<br>
+
+	<button onclick="deregisterAll()">Deregister All</button>
+
+</body>
+
+	<script src="./tabs.js"></script>
+
+	<script>
+
+		const p = window.location.pathname;
+
+		document.getElementById("refresh").href = p;
+
+		// In this setup, we are pretending this is a single-page application and the URL path is changing.
+		function moveTo(path) {
+			window.history.pushState("", "", p + "/" + path)
+		}
+
+		// register the container element by ID
+		var myTabs = new DynamicTabs("section-tabs");
+
+		// register all tabs that have the class "dynamic-tab"
+		myTabs.registerAllTabs();
+
+		const tabIDs = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
+
+		function oddTabs() {
+			myTabs.deregisterAllTabs();
+			myTabs.registerTabs(tabIDs.filter((x, i) => {
+				return i % 2 === 0;
+			}), "mst-");
+		}
+
+		function evenTabs() {
+			myTabs.deregisterAllTabs();
+			myTabs.registerTabs(tabIDs.filter((x, i) => {
+				return i % 2 !== 0;
+			}), "mst-");
+		}
+
+		function allTabs() {
+			myTabs.deregisterAllTabs();
+			myTabs.registerTabs(tabIDs, "mst-");
+		}
+
+		function deregisterAll() {
+			myTabs.deregisterAllTabs();
+		}
+
+	</script>
+
+</html>
