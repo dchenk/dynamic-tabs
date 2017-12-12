@@ -24,13 +24,13 @@
 		<div class="dynamic-tab-arrow arrow-left"><div class="material-icons" aria-label="scroll left">navigate_before</div></div>
 		<div class="dynamic-tabs-framer">
 			<nav class="dynamic-tabs-list">
-				<div onclick="moveTo('first')" class="dynamic-tab" id="main-first">FIRST</div>
-				<div onclick="moveTo('second')" class="dynamic-tab" id="main-second">THE SECOND</div>
-				<div onclick="moveTo('third')" class="dynamic-tab" id="main-third">THIRD THING</div>
-				<div onclick="moveTo('fourth')" class="dynamic-tab" id="main-fourth">FOURTH</div>
-				<div onclick="moveTo('fifth')" class="dynamic-tab" id="main-fifth">FIVE</div>
-				<div onclick="moveTo('sixth')" class="dynamic-tab" id="main-sixth">ELEMENT SIX</div>
-				<div onclick="moveTo('seventh')" class="dynamic-tab" id="main-seventh">SEVENTH</div>
+				<div class="dynamic-tab" id="my-tab-first">FIRST</div>
+				<div class="dynamic-tab" id="my-tab-second">THE SECOND</div>
+				<div class="dynamic-tab" id="my-tab-third">THIRD THING</div>
+				<div class="dynamic-tab" id="my-tab-fourth">FOURTH</div>
+				<div class="dynamic-tab" id="my-tab-fifth">FIVE</div>
+				<div class="dynamic-tab" id="my-tab-sixth">ELEMENT SIX</div>
+				<div class="dynamic-tab" id="my-tab-seventh">SEVENTH</div>
 			</nav>
 			<div class="dynamic-tabs-indicator"><div class="dt-indicator-bar"></div></div>
 		</div>
@@ -39,7 +39,8 @@
 
 	<div class="spacer"></div>
 
-	<a id="refresh">REFRESH</a><br>
+	<h4>Current tab index: <span id="current-indx"></span></h4>
+	<h4>Current tab inner text: <span id="current-text"></span></h4>
 
 	<button id="show-odd">Odd Tabs</button>
 	<button id="show-even">Even Tabs</button>
@@ -55,49 +56,43 @@
 
 		import DynamicTabs from "./tabs.js";
 
-		const p = window.location.pathname,
-			urlQs = window.location.search;
-
-		document.getElementById("refresh").href = p;
-
-		// In this setup, we are pretending this is a single-page application and the URL path is changing.
-		function moveTo(path) {
-			window.history.pushState("", "", p + "/" + path + urlQs)
-		}
-
 		const tabIDs = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
 
-		for (var i = 0; i < tabIDs.length; i++) {
-			(function(indx) {
-				document.getElementById("main-"+tabIDs[i]).addEventListener("click", function() {
-					moveTo(tabIDs[indx]);
-				});
-			})(i);
+		let currIndxDisplay = document.getElementById("current-indx"),
+			currTextDisplay = document.getElementById("current-text");
+
+		function handleSwitch(oldIndx, newIndx) {
+			currIndxDisplay.innerHTML = newIndx;
+			currTextDisplay.innerHTML = document.getElementById("my-tab-"+tabIDs[newIndx]).innerText;
 		}
 
-		// register the container element by ID
+		// Create the object of the container element by ID
 		let myTabs = new DynamicTabs("section-tabs");
 
-		// register all tabs that have the class "dynamic-tab"
+		// Register all tabs (inside the container) that have the class "dynamic-tab"
 		myTabs.registerAllTabs();
 
+		// Attach a custom callback to be called when the active tab changes.
+		myTabs.addSwitchCallback(handleSwitch);
+
+		// Other stuff just for the example
 		document.getElementById("show-odd").addEventListener("click", () => {
 			myTabs.deregisterAllTabs();
 			myTabs.registerTabs(tabIDs.filter((x, i) => {
 				return i % 2 === 0;
-			}), "main-");
+			}), "my-tab-");
 		});
 
 		document.getElementById("show-even").addEventListener("click", () => {
 			myTabs.deregisterAllTabs();
 			myTabs.registerTabs(tabIDs.filter((x, i) => {
 				return i % 2 !== 0;
-			}), "main-");
+			}), "my-tab-");
 		});
 
 		document.getElementById("show-all").addEventListener("click", () => {
 			myTabs.deregisterAllTabs();
-			myTabs.registerTabs(tabIDs, "main-");
+			myTabs.registerTabs(tabIDs, "my-tab-");
 		});
 
 		document.getElementById("deregister-all").addEventListener("click", () => {
