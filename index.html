@@ -66,10 +66,13 @@
 			currTextDisplay.innerHTML = document.getElementById("my-tab-"+tabIDs[newIndx]).innerText;
 		}
 
-		// Create the object of the container element by ID
+		// Create the object of the container element by ID.
 		let myTabs = new DynamicTabs("section-tabs");
 
-		// Register all tabs (inside the container) that have the class "dynamic-tab"
+		// Copy DynamicTabs object to window for access in the console (for the example only).
+		window.myTabs = myTabs;
+
+		// Register all tabs (inside the container), which are identified by having the class "dynamic-tab".
 		myTabs.registerAllTabs();
 
 		// Attach a custom callback to be called when the active tab changes.

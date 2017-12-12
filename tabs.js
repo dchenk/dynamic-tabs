@@ -159,6 +159,33 @@ DynamicTabs.prototype.deregisterTab = function(tabIndex, refreshLayout) {
 
 }
 
+// setActiveTabIndex sets the active tab by its index in the array of registered tabs and then scrolls to it if necessary.
+DynamicTabs.prototype.setActiveTabIndex = function(newIndex) {
+
+	// console.log("this.registeredTabs.length before setActiveTabIndex", this.registeredTabs.length)
+	// console.log("this.activeTabIndex before setActiveTabIndex", this.activeTabIndex)
+
+	// Reset if there are no registered tabs.
+	if (this.registeredTabs.length === 0) {
+		this.activeTabIndex = 0;
+		return;
+	}
+
+	// If something weird is happening, we don't want an invalid index of an array accessed.
+	if (newIndex >= this.registeredTabs.length) {
+		console.log("ERROR: Invalid tab index failed to set");
+		return;
+	}
+
+	this.activeTabIndex = newIndex;
+	setActiveHighlight.call(this, newIndex);
+	this.scrollToActiveTab(); // Re-position the indicator
+
+	// console.log("this.registeredTabs.length after setActiveTabIndex", this.registeredTabs.length)
+	// console.log("this.activeTabIndex after setActiveTabIndex", this.activeTabIndex)
+
+}
+
 DynamicTabs.prototype.addSwitchCallback = function(callback) {
 	this.switchCallbacks.push(callback);
 }
@@ -197,33 +224,6 @@ DynamicTabs.prototype.refreshLayout = function() {
 		this.resetIndicator(); // reset with new tab dimensions (Vue will run setActiveTabIndex anyway, but that's okay)
 		this.hideArrow();
 	}
-
-}
-
-// in the app you shouldn't ever have to provide true for the "force" parameter; it's just there for the library to ensure that the active tab is always set correctly
-DynamicTabs.prototype.setActiveTabIndex = function(newIndex) {
-
-	// console.log("this.registeredTabs.length before setActiveTabIndex", this.registeredTabs.length)
-	// console.log("this.activeTabIndex before setActiveTabIndex", this.activeTabIndex)
-
-	// Reset if there are no registered tabs.
-	if (this.registeredTabs.length === 0) {
-		this.activeTabIndex = 0;
-		return;
-	}
-
-	// If something weird is happening, we don't want an invalid index of an array accessed.
-	if (newIndex >= this.registeredTabs.length) {
-		console.log("ERROR: Invalid tab index failed to set");
-		return;
-	}
-
-	this.activeTabIndex = newIndex;
-	this.setActiveHighlight(newIndex);
-	this.scrollToActiveTab(); // Re-position the indicator
-
-	// console.log("this.registeredTabs.length after setActiveTabIndex", this.registeredTabs.length)
-	// console.log("this.activeTabIndex after setActiveTabIndex", this.activeTabIndex)
 
 }
 

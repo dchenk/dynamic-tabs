@@ -48,6 +48,8 @@ deregisterTab(tabIndex: Number[, refreshLayout: Boolean])
 
 setActiveTabIndex(newIndex: Number)
 
+addSwitchCallback()
+
 #### The following methods can be used directly, but you shouldn't need to because they are implemented to perform all the dynamic activity automatically. (If you find yourself needing to use any of them, please file an issue.)
 
 refreshLayout()
