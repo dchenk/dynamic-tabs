@@ -57,7 +57,7 @@ DynamicTabs.prototype.registerTabs = function(tabIDs, idPrefix) {
 	// console.log("tabs registered; the object:", this)
 	// console.log("tabs registered; the tabs:", JSON.parse(JSON.stringify(this.registeredTabs)));
 
-	this.setActiveHighlight(0); // always reset when registering new tabs; avoid resetting indicator now
+	setActiveHighlight.call(this, 0); // always reset when registering new tabs; avoid resetting indicator now
 	this.refreshLayout();
 
 }
@@ -78,7 +78,7 @@ DynamicTabs.prototype.registerAllTabs = function() {
 		this.registerTab(tabs[i]);
 	}
 
-	this.setActiveHighlight(0); // always reset when registering new tabs; avoid resetting indicator now
+	setActiveHighlight.call(this, 0); // always reset when registering new tabs; avoid resetting indicator now
 	this.refreshLayout();
 
 }
@@ -101,16 +101,16 @@ DynamicTabs.prototype.registerTab = function(tab, refreshLayout) {
 			left: 0,
 			width: 0
 		},
-		oc: this.setActiveTabIndex.bind(this, newTabIndex) // onclick callback named
+		oc: function() { // onclick callback named
+			this.setActiveTabIndex(newTabIndex);
+			for (let i = 0; i < this.switchCallbacks.length; i++) {
+				this.switchCallbacks[i](this.activeTabIndex, newTabIndex);
+			}
+		}
 	})
 
 	// add click listener to fire off callback upon switching tabs
-	tab.addEventListener("click", () => {
-		this.registeredTabs[newTabIndex].oc();
-		for (let i = 0; i < this.switchCallbacks.length; i++) {
-			this.switchCallbacks[i](this.activeTabIndex, newTabIndex);
-		}
-	});
+	tab.addEventListener("click", this.registeredTabs[newTabIndex].oc.bind(this));
 
 	// when registering a single tab programmatically, pass in true for refreshLayout
 	if (refreshLayout !== undefined && refreshLayout) {
@@ -227,31 +227,6 @@ DynamicTabs.prototype.setActiveTabIndex = function(newIndex) {
 
 }
 
-DynamicTabs.prototype.setActiveHighlight = function(tabIndex) {
-	if (this.activeTabIndex < this.registeredTabs.length) { // the array of registered tabs either has not changed or got changed but has the same number of tabs; must check to not try to set out of range tab as not active
-		this.registeredTabs[this.activeTabIndex].el.removeAttribute("data-dtactive");
-	}
-	this.setActiveAttr(tabIndex);
-}
-
-// resetRects is a private method that's called to reset the boundingClientRect info of the tabs.
-function resetRects(firstLeft, widths) {
-	// first, set the first tab manually because its left must be 0
-	setNewRect.call(this, 0, {left: firstLeft, width: widths[0]});
-	// adjust all the other tabs
-	for (let i = 1, tabsLen = this.registeredTabs.length; i < tabsLen; i++) {
-		setNewRect.call(this, i, {left: this.registeredTabs[i-1].rect.left + this.registeredTabs[i-1].rect.width, width: widths[i]})
-	}
-}
-
-function setNewRect(tabIndex, rect) {
-	this.registeredTabs.splice(tabIndex, 1, {
-		el: this.registeredTabs[tabIndex].el,
-		oc: this.registeredTabs[tabIndex].oc,
-		rect: rect
-	})
-}
-
 DynamicTabs.prototype.scrollToActiveTab = function() {
 
 	// return if there's no need to scroll anywhere
@@ -294,7 +269,7 @@ DynamicTabs.prototype.scrollToActiveTab = function() {
 
 		this.scrollRight(nThFrame - ((activeTab.rect.width * 1.1) / this.framerWidth));
 
-	} else { // if there is no scrolling to do
+	} else { // there is no scrolling needed
 
 		if (this.activeTabIndex === 0) { // if active tab is the first one
 			this.hideArrow("left");
@@ -311,6 +286,21 @@ DynamicTabs.prototype.scrollToActiveTab = function() {
 		this.showArrow("right");
 	}
 
+}
+
+DynamicTabs.prototype.resetIndicator = function() {
+	let indx = this.activeTabIndex;
+	if (this.activeTabIndex >= this.registeredTabs.length) { // if moving from a set of tabs that's bigger than the new one, and we were previously on the last one
+		indx = this.registeredTabs.length - 1; // act as if we were on the index as the index of the new last tab, but don't set this tab as active; the app should set the tab index manually
+	}
+	// console.log("|||| RESETTING INDICATOR TO index", indx, " left:", this.framerShift + this.registeredTabs[indx].rect.left)
+	// console.log("this.registeredTabs[indx]", JSON.parse(JSON.stringify(this.registeredTabs[indx])))
+	// console.log("this.registeredTabs[indx].rect.left", this.registeredTabs[indx].rect.left)
+	// console.log("this.framerShift", this.framerShift)
+	// console.log("INDICATOR NEW LEFT", this.framerShift + this.registeredTabs[indx].rect.left)
+	// console.log("INDICATOR NEW WIDTH", this.registeredTabs[indx].rect.width)
+	this.indicatorBar.style.left = (this.framerShift + this.registeredTabs[indx].rect.left) + "px";
+	this.indicatorBar.style.width = this.registeredTabs[indx].rect.width + "px";
 }
 
 // scroll left n frameWidths; frameWidths defaults to 0.85 if undefined
@@ -411,23 +401,33 @@ DynamicTabs.prototype.hideArrow = function(leftRightAll) {
 	}
 }
 
-DynamicTabs.prototype.setActiveAttr = function(tabIndex) {
+// Private utility functions:
+
+// setActiveHighlight marks a tab in the DOM as the active one.
+function setActiveHighlight(tabIndex) {
+	if (this.activeTabIndex < this.registeredTabs.length) { // the array of registered tabs either has not changed or got changed but has the same number of tabs; must check to not try to set out of range tab as not active
+		this.registeredTabs[this.activeTabIndex].el.removeAttribute("data-dtactive");
+	}
 	this.registeredTabs[tabIndex].el.setAttribute("data-dtactive", "y");
 }
 
-DynamicTabs.prototype.resetIndicator = function() {
-	let indx = this.activeTabIndex;
-	if (this.activeTabIndex >= this.registeredTabs.length) { // if moving from a set of tabs that's bigger than the new one, and we were previously on the last one
-		indx = this.registeredTabs.length - 1; // act as if we were on the index as the index of the new last tab, but don't set this tab as active; the app should set the tab index manually
+// resetRects resets the boundingClientRect info of all registered tabs.
+function resetRects(firstLeft, widths) {
+	// first, set the first tab manually because its left must be 0
+	setNewRect.call(this, 0, {left: firstLeft, width: widths[0]});
+	// adjust all the other tabs
+	for (let i = 1, tabsLen = this.registeredTabs.length; i < tabsLen; i++) {
+		setNewRect.call(this, i, {left: this.registeredTabs[i-1].rect.left + this.registeredTabs[i-1].rect.width, width: widths[i]})
 	}
-	// console.log("|||||||| RESETTING INDICATOR TO index", indx, " left:", this.framerShift + this.registeredTabs[indx].rect.left)
-	// console.log("this.registeredTabs[indx]", JSON.parse(JSON.stringify(this.registeredTabs[indx])))
-	// console.log("this.registeredTabs[indx].rect.left", this.registeredTabs[indx].rect.left)
-	// console.log("this.framerShift", this.framerShift)
-	// console.log("INDICATOR NEW LEFT", this.framerShift + this.registeredTabs[indx].rect.left)
-	// console.log("INDICATOR NEW WIDTH", this.registeredTabs[indx].rect.width)
-	this.indicatorBar.style.left = (this.framerShift + this.registeredTabs[indx].rect.left) + "px";
-	this.indicatorBar.style.width = this.registeredTabs[indx].rect.width + "px";
+}
+
+// setNewRect replaces a registered tab by the array splice method (to make the mutation watchable from outside).
+function setNewRect(tabIndex, rect) {
+	this.registeredTabs.splice(tabIndex, 1, {
+		el: this.registeredTabs[tabIndex].el,
+		oc: this.registeredTabs[tabIndex].oc,
+		rect: rect
+	})
 }
 
 export default DynamicTabs;

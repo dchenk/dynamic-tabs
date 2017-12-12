@@ -1,7 +1,7 @@
 {
   "name": "dynamic-tabs",
   "version": "1.1.0",
-  "description": "A JavaScript library for tab UI elements, styled (somewhat) by material design principles.",
+  "description": "A lightweight JavaScript library for tab UI elements, styled (somewhat) by material design principles.",
   "main": "tabs.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

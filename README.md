@@ -1,5 +1,5 @@
 # dynamic-tabs
-A JavaScript library for tab UI elements, styled (somewhat) by material design principles.
+A lightweight JavaScript library for tab UI elements, styled (somewhat) by material design principles.
 
 ## Usage
 The tabs component requires HTML markup with this kind of layout and these CSS classes:
@@ -27,4 +27,36 @@ Create any number of tab elements inside `dynamic-tabs-list` and make sure each 
 
 Look at the file `index.html` for an example of how to set up the tabs.
 
-### Demo: https://dchenk.github.io/dynamic-tabs
+## Demo: https://dchenk.github.io/dynamic-tabs
+
+## Methods available on the DynamicTabs object:
+
+registerTabs(tabIDs: String[, idPrefix:String])
+
+registerAllTabs()
+
+registerTab(tab: HTMLElement[, refreshLayout: Boolean])
+
+deregisterAllTabs()
+
+deregisterTab(tabIndex: Number[, refreshLayout: Boolean])
+
+setActiveTabIndex(newIndex: Number)
+
+#### The following methods can be used directly, but you shouldn't need to because they are implemented to perform all the dynamic activity automatically. (If you find yourself needing to use any of them, please file an issue.)
+
+refreshLayout()
+
+scrollToActiveTab()
+
+resetIndicator()
+
+scrollLeft(framerWidths: Number)
+
+scrollRight(framerWidths: Number)
+
+setTabsOffset(offset: Number)
+
+showArrow(leftRightAll: Enum("left", "right", "all"))
+
+hideArrow(leftRightAll: Enum("left", "right", "all"))
