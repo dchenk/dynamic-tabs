@@ -86,7 +86,7 @@ DynamicTabs.prototype.registerTab = function(tab, refreshLayout) {
 	"use strict";
 
 	// remove the display:none style
-	tab.setAttribute("data-dtr", "ok");
+	tab.setAttribute("data-dtr", "y");
 
 	// initialize
 	let newLength = this.registeredTabs.push({
@@ -181,6 +181,25 @@ DynamicTabs.prototype.refreshLayout = function() {
 		this.resetIndicator(); // reset with new tab dimensions (Vue will run setActiveTabIndex anyway, but that's okay)
 		this.hideArrow();
 	}
+
+}
+
+// in the app you shouldn't ever have to provide true for the "force" parameter; it's just there for the library to ensure that the active tab is always set correctly
+DynamicTabs.prototype.setActiveTabIndex = function(newIndex) {
+
+	// console.log("this.registeredTabs.length before setActiveTabIndex", this.registeredTabs.length)
+	// console.log("this.activeTabIndex before setActiveTabIndex", this.activeTabIndex)
+
+	if (this.registeredTabs.length === 0 || newIndex >= this.registeredTabs.length) {
+		return;
+	}
+
+	this.setActiveHighlight(newIndex);
+
+	this.scrollToActiveTab(); // the indicator will be reset
+
+	// console.log("this.registeredTabs.length after setActiveTabIndex", this.registeredTabs.length)
+	// console.log("this.activeTabIndex after setActiveTabIndex", this.activeTabIndex)
 
 }
 
@@ -361,25 +380,6 @@ DynamicTabs.prototype.hideArrow = function(leftRightAll) {
 	}
 }
 
-// in the app you shouldn't ever have to provide true for the "force" parameter; it's just there for the library to ensure that the active tab is always set correctly
-DynamicTabs.prototype.setActiveTabIndex = function(newIndex) {
-
-	// console.log("this.registeredTabs.length before setActiveTabIndex", this.registeredTabs.length)
-	// console.log("this.activeTabIndex before setActiveTabIndex", this.activeTabIndex)
-
-	if (this.registeredTabs.length === 0 || newIndex >= this.registeredTabs.length) {
-		return;
-	}
-
-	this.setActiveHighlight(newIndex);
-
-	this.scrollToActiveTab(); // the indicator will be reset
-
-	// console.log("this.registeredTabs.length after setActiveTabIndex", this.registeredTabs.length)
-	// console.log("this.activeTabIndex after setActiveTabIndex", this.activeTabIndex)
-
-}
-
 DynamicTabs.prototype.setActiveHighlight = function(tabIndex) {
 	if (this.activeTabIndex < this.registeredTabs.length) { // the array of registered tabs either has not changed or got changed but has the same number of tabs; must check to not try to set out of range tab as not active
 		this.registeredTabs[this.activeTabIndex].el.removeAttribute("data-dtactive");
@@ -406,3 +406,5 @@ DynamicTabs.prototype.resetIndicator = function() {
 	this.indicatorBar.style.left = (this.framerShift + this.registeredTabs[indx].rect.left) + "px";
 	this.indicatorBar.style.width = this.registeredTabs[indx].rect.width + "px";
 }
+
+export default DynamicTabs;

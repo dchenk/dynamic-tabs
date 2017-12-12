@@ -24,13 +24,13 @@
 		<div class="dynamic-tab-arrow arrow-left"><div class="material-icons" aria-label="scroll left">navigate_before</div></div>
 		<div class="dynamic-tabs-framer">
 			<nav class="dynamic-tabs-list">
-				<div onclick="moveTo('first')" class="dynamic-tab" id="mst-first">FIRST</div>
-				<div onclick="moveTo('second')" class="dynamic-tab" id="mst-second">THE SECOND</div>
-				<div onclick="moveTo('third')" class="dynamic-tab" id="mst-third">THIRD THING</div>
-				<div onclick="moveTo('fourth')" class="dynamic-tab" id="mst-fourth">FOURTH</div>
-				<div onclick="moveTo('fifth')" class="dynamic-tab" id="mst-fifth">FIVE</div>
-				<div onclick="moveTo('sixth')" class="dynamic-tab" id="mst-sixth">ELEMENT SIX</div>
-				<div onclick="moveTo('seventh')" class="dynamic-tab" id="mst-seventh">SEVENTH</div>
+				<div onclick="moveTo('first')" class="dynamic-tab" id="main-first">FIRST</div>
+				<div onclick="moveTo('second')" class="dynamic-tab" id="main-second">THE SECOND</div>
+				<div onclick="moveTo('third')" class="dynamic-tab" id="main-third">THIRD THING</div>
+				<div onclick="moveTo('fourth')" class="dynamic-tab" id="main-fourth">FOURTH</div>
+				<div onclick="moveTo('fifth')" class="dynamic-tab" id="main-fifth">FIVE</div>
+				<div onclick="moveTo('sixth')" class="dynamic-tab" id="main-sixth">ELEMENT SIX</div>
+				<div onclick="moveTo('seventh')" class="dynamic-tab" id="main-seventh">SEVENTH</div>
 			</nav>
 			<div class="dynamic-tabs-indicator"><div class="dt-indicator-bar"></div></div>
 		</div>
@@ -41,59 +41,68 @@
 
 	<a id="refresh">REFRESH</a><br>
 
-	<button onclick="oddTabs()">Odd Tabs</button>
-	<button onclick="evenTabs()">Even Tabs</button>
-	<button onclick="allTabs()">All Tabs</button>
+	<button id="show-odd">Odd Tabs</button>
+	<button id="show-even">Even Tabs</button>
+	<button id="show-all">All Tabs</button>
 
 	<br>
 
-	<button onclick="deregisterAll()">Deregister All</button>
+	<button id="deregister-all">Deregister All</button>
 
 </body>
 
-	<script src="./tabs.js"></script>
+	<script type="module">
 
-	<script>
+		import DynamicTabs from "./tabs.js";
 
-		const p = window.location.pathname;
+		const p = window.location.pathname,
+			urlQs = window.location.search;
 
 		document.getElementById("refresh").href = p;
 
 		// In this setup, we are pretending this is a single-page application and the URL path is changing.
 		function moveTo(path) {
-			window.history.pushState("", "", p + "/" + path)
+			window.history.pushState("", "", p + "/" + path + urlQs)
+		}
+
+		const tabIDs = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
+
+		for (var i = 0; i < tabIDs.length; i++) {
+			(function(indx) {
+				document.getElementById("main-"+tabIDs[i]).addEventListener("click", function() {
+					moveTo(tabIDs[indx]);
+				});
+			})(i);
 		}
 
 		// register the container element by ID
-		var myTabs = new DynamicTabs("section-tabs");
+		let myTabs = new DynamicTabs("section-tabs");
 
 		// register all tabs that have the class "dynamic-tab"
 		myTabs.registerAllTabs();
 
-		const tabIDs = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
-
-		function oddTabs() {
+		document.getElementById("show-odd").addEventListener("click", () => {
 			myTabs.deregisterAllTabs();
 			myTabs.registerTabs(tabIDs.filter((x, i) => {
 				return i % 2 === 0;
-			}), "mst-");
-		}
+			}), "main-");
+		});
 
-		function evenTabs() {
+		document.getElementById("show-even").addEventListener("click", () => {
 			myTabs.deregisterAllTabs();
 			myTabs.registerTabs(tabIDs.filter((x, i) => {
 				return i % 2 !== 0;
-			}), "mst-");
-		}
+			}), "main-");
+		});
 
-		function allTabs() {
+		document.getElementById("show-all").addEventListener("click", () => {
 			myTabs.deregisterAllTabs();
-			myTabs.registerTabs(tabIDs, "mst-");
-		}
+			myTabs.registerTabs(tabIDs, "main-");
+		});
 
-		function deregisterAll() {
+		document.getElementById("deregister-all").addEventListener("click", () => {
 			myTabs.deregisterAllTabs();
-		}
+		});
 
 	</script>
 
