@@ -1,3 +1,5 @@
+"use strict";
+
 function DynamicTabs(containerID) {
 
 	if (!containerID) {
@@ -62,10 +64,9 @@ DynamicTabs.prototype.registerTabs = function(tabIDs, idPrefix) {
 
 }
 
-// register all tabs (elements inside of the container that have the class "dynamic-tab")
+// registerAllTabs registers all tabs (elements inside of the container that have the class "dynamic-tab") and
+// refreshes the layout.
 DynamicTabs.prototype.registerAllTabs = function() {
-
-	"use strict";
 
 	const tabs = this.container.getElementsByClassName("dynamic-tab")
 
@@ -84,17 +85,15 @@ DynamicTabs.prototype.registerAllTabs = function() {
 }
 
 // pass in the tab element itself to register it (add to registeredTabs array)
-DynamicTabs.prototype.registerTab = function(tab, refreshLayout) {
+DynamicTabs.prototype.registerTab = function(tab, refreshLayout = false) {
 
-	"use strict";
-
-	// remove the display:none style
+	// Remove the display:none style property that is by default on unregistered tabs.
 	tab.setAttribute("data-dtr", "y");
 
 	// The length of the registeredTabs array will be the index of the new tab.
 	const newTabIndex = this.registeredTabs.length;
 
-	// initialize
+	// Add an initialized tab.
 	this.registeredTabs.push({
 		el: tab,
 		rect: {
@@ -107,13 +106,15 @@ DynamicTabs.prototype.registerTab = function(tab, refreshLayout) {
 				this.switchCallbacks[i](this.activeTabIndex, newTabIndex);
 			}
 		}
-	})
+	});
 
-	// add click listener to fire off callback upon switching tabs
+	// Add click listener to set active tab and fire off callbacks upon switching tabs.
 	tab.addEventListener("click", this.registeredTabs[newTabIndex].oc.bind(this));
 
-	// when registering a single tab programmatically, pass in true for refreshLayout
-	if (refreshLayout !== undefined && refreshLayout) {
+	// When registering a single tab programmatically, refreshLayout should be set to true.
+	// Otherwise, when using method registerTabs or registerAllTabs, refreshLayout is called after
+	// all of the desired tabs are registered.
+	if (refreshLayout) {
 		this.refreshLayout();
 	}
 
@@ -128,8 +129,6 @@ DynamicTabs.prototype.deregisterAllTabs = function() {
 }
 
 DynamicTabs.prototype.deregisterTab = function(tabIndex, refreshLayout) {
-
-	"use strict";
 
 	// remove event listener
 	this.registeredTabs[tabIndex].el.removeEventListener("click", this.registeredTabs[tabIndex].oc)
@@ -191,8 +190,6 @@ DynamicTabs.prototype.addSwitchCallback = function(callback) {
 }
 
 DynamicTabs.prototype.refreshLayout = function() {
-
-	"use strict";
 
 	if (this.registeredTabs.length === 0) {
 		return;
@@ -290,11 +287,12 @@ DynamicTabs.prototype.scrollToActiveTab = function() {
 
 DynamicTabs.prototype.resetIndicator = function() {
 	let indx = this.activeTabIndex;
-	if (this.activeTabIndex >= this.registeredTabs.length) { // if moving from a set of tabs that's bigger than the new one, and we were previously on the last one
-		indx = this.registeredTabs.length - 1; // act as if we were on the index as the index of the new last tab, but don't set this tab as active; the app should set the tab index manually
+	// Check if the index of the active tab is possible given the current number of registered tabs.
+	if (indx >= this.registeredTabs.length) {
+		// Act as if we were on the tab index of the new last tab, but don't set this tab as active; the app should set the tab index manually.
+		indx = this.registeredTabs.length - 1;
 	}
 	// console.log("|||| RESETTING INDICATOR TO index", indx, " left:", this.framerShift + this.registeredTabs[indx].rect.left)
-	// console.log("this.registeredTabs[indx]", JSON.parse(JSON.stringify(this.registeredTabs[indx])))
 	// console.log("this.registeredTabs[indx].rect.left", this.registeredTabs[indx].rect.left)
 	// console.log("this.framerShift", this.framerShift)
 	// console.log("INDICATOR NEW LEFT", this.framerShift + this.registeredTabs[indx].rect.left)
