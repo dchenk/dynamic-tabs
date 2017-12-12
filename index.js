@@ -1,1 +1,0 @@
-exports.DynamicTabs = DynamicTabs;
