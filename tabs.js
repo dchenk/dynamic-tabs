@@ -37,8 +37,9 @@ function DynamicTabs(containerID) {
 
 }
 
-// register the tabs with the IDs in the tabsIDs array; optionally include a prefix to prepend before each ID
-DynamicTabs.prototype.registerTabs = function(tabIDs, idPrefix) {
+// registerTabs registers the tabs with the IDs in the tabsIDs array. The optional idPrefix parameter can be set
+// to prefix each targeted tab element by ID with the string.
+DynamicTabs.prototype.registerTabs = function(tabIDs, idPrefix = "") {
 
 	if (tabIDs === undefined || tabIDs.length === 0) {
 		console.log("ERROR: Must pass in an array of tab IDs to register")
@@ -46,11 +47,6 @@ DynamicTabs.prototype.registerTabs = function(tabIDs, idPrefix) {
 	}
 
 	// console.log("REGISTERING TABS. Current tabs:", JSON.stringify(this.registeredTabs))
-
-	// The idPrefix parameter can be set to prefix each targeted tab element by ID with the string.
-	if (idPrefix === undefined) {
-		idPrefix = "";
-	}
 
 	for (let i = 0; i < tabIDs.length; i++) {
 		this.registerTab(document.getElementById(idPrefix+tabIDs[i]))
@@ -79,12 +75,13 @@ DynamicTabs.prototype.registerAllTabs = function() {
 		this.registerTab(tabs[i]);
 	}
 
-	setActiveHighlight.call(this, 0); // always reset when registering new tabs; avoid resetting indicator now
+	// Reset the active tab and refresh the layout because we are registering all tabs.
+	setActiveHighlight.call(this, 0);
 	this.refreshLayout();
 
 }
 
-// pass in the tab element itself to register it (add to registeredTabs array)
+// registerTab registers the passed in the HTML tab element.
 DynamicTabs.prototype.registerTab = function(tab, refreshLayout = false) {
 
 	// Remove the display:none style property that is by default on unregistered tabs.
@@ -93,23 +90,27 @@ DynamicTabs.prototype.registerTab = function(tab, refreshLayout = false) {
 	// The length of the registeredTabs array will be the index of the new tab.
 	const newTabIndex = this.registeredTabs.length;
 
-	// Add an initialized tab.
+	let parent = this;
+
+	// Add click listener to set active tab and fire off callbacks upon switching tabs.
+	tab.handleEvent = function(e) {
+		if (e.type === "click") {
+			parent.setActiveTabIndex(newTabIndex);
+			for (let i = 0; i < parent.switchCallbacks.length; i++) {
+				parent.switchCallbacks[i](parent.activeTabIndex, newTabIndex);
+			}
+		}
+	}
+	tab.addEventListener("click", tab);
+
+	// Add the initialized tab.
 	this.registeredTabs.push({
 		el: tab,
 		rect: {
 			left: 0,
 			width: 0
-		},
-		oc: function() { // onclick callback named
-			this.setActiveTabIndex(newTabIndex);
-			for (let i = 0; i < this.switchCallbacks.length; i++) {
-				this.switchCallbacks[i](this.activeTabIndex, newTabIndex);
-			}
 		}
 	});
-
-	// Add click listener to set active tab and fire off callbacks upon switching tabs.
-	tab.addEventListener("click", this.registeredTabs[newTabIndex].oc.bind(this));
 
 	// When registering a single tab programmatically, refreshLayout should be set to true.
 	// Otherwise, when using method registerTabs or registerAllTabs, refreshLayout is called after
@@ -120,6 +121,8 @@ DynamicTabs.prototype.registerTab = function(tab, refreshLayout = false) {
 
 }
 
+// deregisterAllTabs de-registers all tabs. Look at function deregisterTab to understand what it means
+// to de-register a tab.
 DynamicTabs.prototype.deregisterAllTabs = function() {
 	for (let i = this.registeredTabs.length; i > 0; i--) {
 		this.deregisterTab(0);
@@ -128,15 +131,18 @@ DynamicTabs.prototype.deregisterAllTabs = function() {
 	this.refreshLayout();
 }
 
-DynamicTabs.prototype.deregisterTab = function(tabIndex, refreshLayout) {
+// deregisterTab de-registers the tab with the given index: the element's click event listener (and the added callbacks)
+// is removed, the element is hidden from view, and it is removed from the registeredTabs array,
+DynamicTabs.prototype.deregisterTab = function(tabIndex, refreshLayout = false) {
 
-	// remove event listener
-	this.registeredTabs[tabIndex].el.removeEventListener("click", this.registeredTabs[tabIndex].oc)
+	// Remove the event listener.
+	// this.registeredTabs[tabIndex].el.removeEventListener("click", this.registeredTabs[tabIndex].oc)
+	this.registeredTabs[tabIndex].el.removeEventListener("click", this.registeredTabs[tabIndex].el);
 
-	// remove data-dtr to hide
+	// Remove the "data-dtr" attribute to hide the tab from view.
 	this.registeredTabs[tabIndex].el.removeAttribute("data-dtr");
 
-	// remove active attribute (in case it is active)
+	// Remove the active attribute (in case it is active).
 	this.registeredTabs[tabIndex].el.removeAttribute("data-dtactive");
 
 	const ml = this.registeredTabs[tabIndex].el.style["margin-left"];
@@ -144,15 +150,17 @@ DynamicTabs.prototype.deregisterTab = function(tabIndex, refreshLayout) {
 		this.registeredTabs[tabIndex].el.style["margin-left"] = "0px";
 	}
 
-	// splice it out of the array
+	// Splice the element out of the array.
 	this.registeredTabs.splice(tabIndex, 1);
 
 	if (this.registeredTabs.length === 0) {
 		this.indicatorBar.style.width = "0";
 	}
 
-	// when registering a single component programmatically, pass in true for refreshLayout
-	if (refreshLayout !== undefined && refreshLayout) {
+	// When de-registering a single tab programmatically, refreshLayout should be set to true.
+	// Otherwise, when using method deregisterTabs or deregisterAllTabs, refreshLayout is called after
+	// all of the appropriate tabs are de-registered.
+	if (refreshLayout) {
 		this.refreshLayout();
 	}
 
@@ -226,7 +234,7 @@ DynamicTabs.prototype.refreshLayout = function() {
 
 DynamicTabs.prototype.scrollToActiveTab = function() {
 
-	// return if there's no need to scroll anywhere
+	// Return if there's no need to scroll anywhere.
 	if (this.totalTabsWidth <= this.framerWidth) { // the total number of framer widths that equal the length of totalTabsWidth
 		this.resetIndicator();
 		return;
@@ -401,9 +409,12 @@ DynamicTabs.prototype.hideArrow = function(leftRightAll) {
 
 // Private utility functions:
 
-// setActiveHighlight marks a tab in the DOM as the active one.
+// setActiveHighlight marks a registered tab in the DOM as the active one after un-marking the current active
+// tab as active.
 function setActiveHighlight(tabIndex) {
-	if (this.activeTabIndex < this.registeredTabs.length) { // the array of registered tabs either has not changed or got changed but has the same number of tabs; must check to not try to set out of range tab as not active
+	// If the array of registered tabs either has not changed or got changed but has the same number of tabs,
+	// must check to not try to set out of range tab index as not active.
+	if (this.activeTabIndex < this.registeredTabs.length) {
 		this.registeredTabs[this.activeTabIndex].el.removeAttribute("data-dtactive");
 	}
 	this.registeredTabs[tabIndex].el.setAttribute("data-dtactive", "y");
@@ -423,7 +434,7 @@ function resetRects(firstLeft, widths) {
 function setNewRect(tabIndex, rect) {
 	this.registeredTabs.splice(tabIndex, 1, {
 		el: this.registeredTabs[tabIndex].el,
-		oc: this.registeredTabs[tabIndex].oc,
+		// oc: this.registeredTabs[tabIndex].oc,
 		rect: rect
 	})
 }

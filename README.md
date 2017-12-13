@@ -1,12 +1,13 @@
 # dynamic-tabs
 A lightweight JavaScript library for tab UI elements, styled (somewhat) by material design principles.
 
+## Usage
+
 Install with npm:
 ```bash
 npm install --save dynamic-tabs
 ```
 
-## Usage
 The tabs component requires HTML markup with this kind of layout and these CSS classes:
 ```
 <div id="section-tabs" class="dynamic-tabs">

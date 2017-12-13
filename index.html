@@ -66,6 +66,12 @@
 			currTextDisplay.innerHTML = document.getElementById("my-tab-"+tabIDs[newIndx]).innerText;
 		}
 
+		// Sample click handler attached as if by an external application.
+		// This click event listener will not be removed when the tab is deregistered.
+		document.getElementById("my-tab-second").addEventListener("click", function () {
+			console.log("click handled on second tab (before register)");
+		});
+
 		// Create the object of the container element by ID.
 		let myTabs = new DynamicTabs("section-tabs");
 
@@ -79,6 +85,13 @@
 		myTabs.addSwitchCallback(handleSwitch);
 
 		// Other stuff just for the example
+
+		// Yet another sample click handler attached as if by an external application (after tabs are registered).
+		// This click event listener will not be removed when the tab is deregistered.
+		document.getElementById("my-tab-second").addEventListener("click", function () {
+			console.log("click handled on second tab (after register)");
+		});
+
 		document.getElementById("show-odd").addEventListener("click", () => {
 			myTabs.deregisterAllTabs();
 			myTabs.registerTabs(tabIDs.filter((x, i) => {
