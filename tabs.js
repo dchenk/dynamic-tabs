@@ -1,5 +1,7 @@
 "use strict";
 
+import ResizeObserver from "resize-observer-polyfill";
+
 function DynamicTabs(containerID) {
 
 	if (!containerID) {
@@ -33,7 +35,18 @@ function DynamicTabs(containerID) {
 
 	this.arrowRight.addEventListener("click", this.scrollRight.bind(this, 0.85));
 
-	window.addEventListener("resize", this.refreshLayout.bind(this));
+	const ro = new ResizeObserver((entries) => {
+		for (const entry of entries) {
+			this.refreshLayout();
+			const {left, top, width, height} = entry.contentRect;
+			console.log('Element:', entry.target);
+			console.log(`Element's size: ${ width }px x ${ height }px`);
+			console.log(`Element's paddings: ${ top }px ; ${ left }px`);
+		}
+	});
+	ro.observe(this.framer);
+	// this.framer.addEventListener("resize", this.refreshLayout.bind(this))
+	// window.addEventListener("resize", this.refreshLayout.bind(this));
 
 }
 
