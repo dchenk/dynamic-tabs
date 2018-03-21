@@ -1,10 +1,15 @@
 const path = require("path");
 
 module.exports = {
+	// context: path.resolve(__dirname, "../demo"),
 	entry: {
-		app: "./index.js"
+		app: "./demo.js"
 	},
 	devtool: "inline-source-map",
+	devServer: {
+		contentBase: "./demo",
+		publicPath: "./demo/"
+	},
 	plugins: [],
 	output: {
 		filename: "tabs.js",

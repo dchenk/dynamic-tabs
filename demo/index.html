@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>DynamicTabs</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"><!-- this icon font used for example only, and you can use anything else -->
+	<style>
+		body {
+			margin: 0;
+			color: #303030;
+		}
+		.spacer {
+			height: 50px;
+			background-color: gainsboro;
+		}
+	</style>
+</head>
+<body>
+
+	<h2>Welcome to the development server!</h2>
+
+	<div class="spacer"></div>
+
+	<div id="section-tabs" class="dynamic-tabs">
+		<div class="dynamic-tab-arrow arrow-left"><div class="material-icons" aria-label="scroll left">navigate_before</div></div>
+		<div class="dynamic-tabs-framer">
+			<nav class="dynamic-tabs-list">
+				<div class="dynamic-tab" id="my-tab-first">FIRST</div>
+				<div class="dynamic-tab" id="my-tab-second">THE SECOND</div>
+				<div class="dynamic-tab" id="my-tab-third">THIRD THING</div>
+				<div class="dynamic-tab" id="my-tab-fourth">FOURTH</div>
+				<div class="dynamic-tab" id="my-tab-fifth">FIVE</div>
+				<div class="dynamic-tab" id="my-tab-sixth">ELEMENT SIX</div>
+				<div class="dynamic-tab" id="my-tab-seventh">SEVENTH</div>
+			</nav>
+			<div class="dynamic-tabs-indicator"><div class="dt-indicator-bar"></div></div>
+		</div>
+		<div class="dynamic-tab-arrow arrow-right"><div class="material-icons" aria-label="scroll right">navigate_next</div></div>
+	</div>
+
+	<div class="spacer"></div>
+
+	<h4>Current tab index: <span id="current-indx"></span></h4>
+	<h4>Current tab inner text: <span id="current-text"></span></h4>
+
+	<button id="show-odd">Odd Tabs</button>
+	<button id="show-even">Even Tabs</button>
+	<button id="show-all">All Tabs</button>
+
+	<br>
+
+	<button id="deregister-all">Deregister All</button>
+
+</body>
+</html>

@@ -2,12 +2,10 @@
   "name": "dynamic-tabs",
   "version": "1.1.2",
   "description": "A lightweight JavaScript library for tab UI elements, styled (somewhat) by material design principles.",
-  "main": "tabs.js",
+  "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
-    "start": "webpack-dev-server --open",
-    "watch": "webpack --watch --mode development",
-    "server": "node server.js",
+    "start": "webpack-dev-server --open --config webpack-dev-config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
