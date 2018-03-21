@@ -5,7 +5,7 @@ module.exports = {
 	entry: {
 		app: "./demo.js"
 	},
-	devtool: "inline-source-map",
+	devtool: "cheap-eval-source-map",
 	devServer: {
 		contentBase: "./demo",
 		publicPath: "./demo/"
