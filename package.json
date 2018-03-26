@@ -1,6 +1,6 @@
 {
   "name": "dynamic-tabs",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A lightweight JavaScript library for tab UI elements, styled (somewhat) by material design principles.",
   "main": "src/index.js",
   "scripts": {
