@@ -8,6 +8,15 @@ Install with npm:
 npm install --save dynamic-tabs
 ```
 
+In your code, import the main JavaScript file:
+```
+import DynamicTabs from "dynamic-tabs" // the DynamicTabs identifier can be anything
+```
+and the required CSS file:
+```
+import "dynamic-tabs/dist/tabs.css"
+```
+
 The tabs component requires HTML markup with this kind of layout and these CSS classes:
 ```
 <div id="section-tabs" class="dynamic-tabs">

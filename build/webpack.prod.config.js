@@ -1,32 +1,26 @@
-const path = require('path');
-const webpack = require('webpack');
-const merge = require('webpack-merge')
-const baseWebpackConfig = require('./webpack.common.config');
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const merge = require("webpack-merge")
+const baseWebpackConfig = require("./webpack.base.config");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
-
-const plugin = new ExtractTextPlugin({
-    // `allChunks` is needed to extract from extracted chunks as well.
-    filename: "demo.css",
+module.exports = merge(baseWebpackConfig, {
+	entry: "./src/index.js",
+	module: {
+		rules: [
+			{
+				test: /\.css$/,
+				use: [
+					{loader: "style-loader"},
+					{loader: "css-loader", options: {minimize: true}}
+				],
+			}
+		]
+	},
+	plugins: [
+		new CopyWebpackPlugin([
+			{
+				from: "src/tabs.css",
+				to: "tabs.css"
+			}
+		])
+	]
 });
-
-const webpackConfig = merge(baseWebpackConfig, {
-    module: {
-        rules: [
-            {
-                test: /(\.css)$/,
-                exclude: [ /node_modules/],
-                use:
-                    plugin.extract({
-                        use: ['css-loader'],
-                        fallback: "style-loader",
-                    }),
-            }
-        ]
-    },
-    plugins: [
-        plugin
-    ]
-});
-
-module.exports = webpackConfig;

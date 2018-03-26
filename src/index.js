@@ -35,18 +35,8 @@ function DynamicTabs(containerID) {
 
 	this.arrowRight.addEventListener("click", this.scrollRight.bind(this, 0.85));
 
-	const ro = new ResizeObserver((entries) => {
-		for (const entry of entries) {
-			this.refreshLayout();
-			const {left, top, width, height} = entry.contentRect;
-			console.log('Element:', entry.target);
-			console.log(`Element's size: ${ width }px x ${ height }px`);
-			console.log(`Element's paddings: ${ top }px ; ${ left }px`);
-		}
-	});
+	const ro = new ResizeObserver(this.refreshLayout.bind(this));
 	ro.observe(this.framer);
-	// this.framer.addEventListener("resize", this.refreshLayout.bind(this))
-	// window.addEventListener("resize", this.refreshLayout.bind(this));
 
 }
 
@@ -58,8 +48,6 @@ DynamicTabs.prototype.registerTabs = function(tabIDs, idPrefix = "") {
 		console.log("ERROR: Must pass in an array of tab IDs to register")
 		return;
 	}
-
-	// console.log("REGISTERING TABS. Current tabs:", JSON.stringify(this.registeredTabs))
 
 	for (let i = 0; i < tabIDs.length; i++) {
 		this.registerTab(document.getElementById(idPrefix+tabIDs[i]))

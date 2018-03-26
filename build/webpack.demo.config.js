@@ -1,14 +1,30 @@
-const path = require('path');
-const webpack = require('webpack');
-const merge = require('webpack-merge')
-const prodWebpackConfig = require('./webpack.prod.config');
+const path = require("path");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const webpackConfig = merge(prodWebpackConfig, {
-    output: {
-        path: path.resolve('./', 'demo'),
-        publicPath: '../demo',
-        filename: 'built.js'
-    },
+const plugin = new ExtractTextPlugin({
+	filename: "demo.css",
 });
 
-module.exports = webpackConfig;
+module.exports = {
+	entry: "./demo.js",
+	output: {
+		path: path.resolve("./", "docs"),
+		// publicPath: "../demo",
+		filename: "built.js"
+	},
+	module: {
+		rules: [
+			{
+				test: /(\.css)$/,
+				exclude: [/node_modules/],
+				use: plugin.extract({
+					use: ["css-loader"],
+					fallback: "style-loader"
+				})
+			}
+		]
+	},
+	plugins: [
+		plugin
+	]
+};

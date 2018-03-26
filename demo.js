@@ -1,10 +1,10 @@
-import DynamicTabs from "../index.js";
-import "../tabs.css";
+import DynamicTabs from "./src/index.js";
+import "./src/tabs.css";
 
 const tabIDs = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
 
 let currIndxDisplay = document.getElementById("current-indx"),
-  currTextDisplay = document.getElementById("current-text");
+	currTextDisplay = document.getElementById("current-text");
 
 function handleSwitch(oldIndx, newIndx) {
 	currIndxDisplay.innerHTML = newIndx;
