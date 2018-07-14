@@ -1,37 +1,19 @@
-const path = require("path");
 const webpack = require("webpack");
 const merge = require("webpack-merge");
 const baseWebpackConfig = require("./webpack.base.config");
 
 module.exports = merge(baseWebpackConfig, {
-	entry: "./demo.js",
+	entry: "./docs/demo.js",
 	module:{
 		rules: [
 			{
-				test: /(\.css|\.scss|\.sass)$/,
+				test: /\.css$/,
 				use: [
-					"style-loader",
 					{
-						loader: "css-loader",
-						options: {
-							sourceMap: true
-						}
+						loader: "style-loader"
 					},
 					{
-						loader: "postcss-loader",
-						options: {
-							plugins: () => [
-								require("autoprefixer")
-							],
-							sourceMap: true
-						}
-					},
-					{
-						loader: "sass-loader",
-						options: {
-							includePaths: [path.resolve("./", "scss")],
-							sourceMap: true
-						}
+						loader: "css-loader"
 					}
 				]
 			}
@@ -44,8 +26,7 @@ module.exports = merge(baseWebpackConfig, {
 	},
 	plugins: [
 		new webpack.DefinePlugin({
-			"process.env.NODE_ENV": JSON.stringify('development'),
-			__DEV__: true
+			"process.env.NODE_ENV": JSON.stringify("development")
 		}),
 		new webpack.HotModuleReplacementPlugin()
 	]

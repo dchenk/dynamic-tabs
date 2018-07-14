@@ -6,7 +6,7 @@ const plugin = new ExtractTextPlugin({
 });
 
 module.exports = {
-	entry: "./demo.js",
+	entry: "./docs/demo.js",
 	output: {
 		path: path.resolve("./", "docs"),
 		// publicPath: "../demo",
@@ -15,7 +15,7 @@ module.exports = {
 	module: {
 		rules: [
 			{
-				test: /(\.css)$/,
+				test: /\.css$/,
 				exclude: [/node_modules/],
 				use: plugin.extract({
 					use: ["css-loader"],
