@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode production --config build/webpack.prod.config.js",
     "demo": "webpack --mode production --config build/webpack.demo.config.js",
-    "start": "webpack-dev-server  --mode development --open --config build/webpack.dev.config.js",
+    "dev": "webpack-dev-server --mode development --open --config build/webpack.dev.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -29,18 +29,15 @@
     "resize-observer-polyfill": "^1.5.0"
   },
   "devDependencies": {
-    "autoprefixer": "^8.6.5",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
-    "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
     "express": "^4.16.3",
     "mini-css-extract-plugin": "^0.4.1",
     "optimize-css-assets-webpack-plugin": "^4.0.3",
     "style-loader": "^0.20.3",
-    "transform-runtime": "0.0.0",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "webpack": "^4.16.0",
     "webpack-cli": "^2.1.5",
