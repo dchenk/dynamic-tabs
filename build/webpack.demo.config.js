@@ -1,30 +1,40 @@
 const path = require("path");
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const merge = require("webpack-merge");
+const baseWebpackConfig = require("./webpack.base.config");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
-const plugin = new ExtractTextPlugin({
-	filename: "demo.css",
-});
-
-module.exports = {
+module.exports = merge(baseWebpackConfig, {
 	entry: "./docs/demo.js",
 	output: {
 		path: path.resolve("./", "docs"),
-		// publicPath: "../demo",
-		filename: "built.js"
+		filename: "built-bundle.js"
+	},
+	optimization: {
+		minimizer: [
+			new UglifyJsPlugin({}),
+			new OptimizeCssAssetsPlugin({})
+		]
 	},
 	module: {
 		rules: [
 			{
 				test: /\.css$/,
-				exclude: [/node_modules/],
-				use: plugin.extract({
-					use: ["css-loader"],
-					fallback: "style-loader"
-				})
+				use: [
+					{
+						loader: MiniCssExtractPlugin.loader
+					},
+					{
+						loader: "css-loader"
+					}
+				]
 			}
 		]
 	},
 	plugins: [
-		plugin
+		new MiniCssExtractPlugin({
+			filename: "demo.css"
+		})
 	]
-};
+});
