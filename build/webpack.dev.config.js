@@ -1,9 +1,13 @@
-const webpack = require("webpack");
+const path = require("path");
 const merge = require("webpack-merge");
 const baseWebpackConfig = require("./webpack.base.config");
 
 module.exports = merge(baseWebpackConfig, {
 	entry: "./docs/demo.js",
+	output: {
+		path: path.resolve("./", "dist"),
+		filename: "dev-bundle.js"
+	},
 	module:{
 		rules: [
 			{
@@ -21,9 +25,7 @@ module.exports = merge(baseWebpackConfig, {
 	},
 	devServer: {
 		contentBase: "./",
-		publicPath: "/dist"
-	},
-	plugins: [
-
-	]
+		publicPath: "/dist",
+		watchContentBase: true
+	}
 });
