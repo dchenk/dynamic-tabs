@@ -20,7 +20,7 @@
     "javascript"
   ],
   "author": "Dmitriy Cherchenko (Wider Webs LLC)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/dchenk/dynamic-tabs/issues"
   },
