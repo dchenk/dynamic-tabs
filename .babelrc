@@ -1,7 +1,11 @@
 {
 	"presets": [
-		["env", { "modules": false }],
-		"stage-1"
+		["env", {
+			"targets": {
+				"browsers": ["last 3 Chrome versions", "safari >= 10", "> 3%"]
+			},
+			"modules": false
+		}]
 	],
 	"plugins": [
 		[
@@ -12,15 +16,5 @@
 			}
 		]
 	],
-	"compact": "true",
-	"env": {
-		"production": {},
-		"test": {
-			"plugins": [
-				"dynamic-import-node",
-				"transform-es2015-modules-commonjs"
-			],
-			"sourceMaps": "both"
-		}
-	}
+	"compact": "true"
 }
