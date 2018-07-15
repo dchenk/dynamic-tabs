@@ -20,7 +20,7 @@ import "dynamic-tabs/dist/tabs.css"
 The tabs component requires HTML markup with this kind of layout and these CSS classes:
 ```
 <div id="section-tabs" class="dynamic-tabs">
-    <div class="dynamic-tab-arrow arrow-left"><div class="material-icons" aria-label="scroll left">navigate_before</div></div>
+    <div class="dynamic-tabs-arrow"><div class="material-icons" aria-label="scroll left">navigate_before</div></div>
     <div class="dynamic-tabs-framer">
         <nav class="dynamic-tabs-list">
             <div class="dynamic-tab" id="my-tab-first">FIRST</div>
@@ -33,10 +33,10 @@ The tabs component requires HTML markup with this kind of layout and these CSS c
         </nav>
         <div class="dynamic-tabs-indicator"><div class="dt-indicator-bar"></div></div>
     </div>
-    <div class="dynamic-tab-arrow arrow-right"><div class="material-icons" aria-label="scroll right">navigate_next</div></div>
+    <div class="dynamic-tabs-arrow"><div class="material-icons" aria-label="scroll right">navigate_next</div></div>
 </div>
 ```
-There needs to be a wrapping element with a `dynamic-tabs` class; an element as shown with classes `dynamic-tab-arrow arrow-left`; a wrapper of the tabs with class `dynamic-tabs-list` containing direct children each with the class `dynamic-tab`; and after (and outside) that a `<div class="dynamic-tabs-indicator"><div class="dt-indicator-bar"></div></div>` element; and then outside of that an element as shown with the classes `dynamic-tab-arrow arrow-right`.
+There needs to be a wrapping element with a `dynamic-tabs` class; an element as shown with class `dynamic-tabs-arrow`; a wrapper of the tabs with class `dynamic-tabs-list` containing direct children each with the class `dynamic-tab`; and after (and outside) that a `<div class="dynamic-tabs-indicator"><div class="dt-indicator-bar"></div></div>` element; and then outside of that an element as shown with the class `dynamic-tabs-arrow`.
 
 Currently, if you're using this exact HTML markup, you need to also include `<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">` in the document head.
 In the next big release the left and right arrow icons will be inserted automatically, so this dependency won't be needed.

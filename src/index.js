@@ -2,14 +2,21 @@
 
 import ResizeObserver from "resize-observer-polyfill";
 
-function DynamicTabs(containerID) {
+/**
+ * @constructor
+ * @param {(HTMLElement|string)} container - The containing element or the ID of the containing element.
+ */
+function DynamicTabs(container) {
 
-	if (!containerID) {
-		console.log("ERROR: To register dynamic tabs, pass in the ID of a node containing the tabs");
-		return
+	if (container instanceof HTMLElement) {
+		this.container = container;
+	} else {
+		this.container = document.getElementById(container);
 	}
 
-	this.container = document.getElementById(containerID);
+	if (!container) {
+		throw new Error("DynamicTabs: To register tabs, pass in an HTMLElement or the ID of a node containing the tabs");
+	}
 
 	this.registeredTabs = [];
 
@@ -27,9 +34,13 @@ function DynamicTabs(containerID) {
 
 	this.indicatorBar = this.container.getElementsByClassName("dt-indicator-bar")[0];
 
-	this.arrowLeft = this.container.getElementsByClassName("arrow-left")[0];
+	const arrows = this.container.getElementsByClassName("dynamic-tabs-arrow");
+	if (arrows.length !== 2) {
+		throw new Error("DynamicTabs: The tabs container must have two elements with the class 'dynamic-tabs-arrow'");
+	}
 
-	this.arrowRight = this.container.getElementsByClassName("arrow-right")[0];
+	this.arrowLeft = arrows[0];
+	this.arrowRight = arrows[1];
 
 	this.arrowLeft.addEventListener("click", this.scrollLeft.bind(this, 0.85));
 
