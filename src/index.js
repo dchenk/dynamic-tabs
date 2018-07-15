@@ -24,9 +24,14 @@ function DynamicTabs(container) {
 
 	this.switchCallbacks = [];
 
-	this.framer = this.container.getElementsByClassName("dynamic-tabs-framer")[0];
+	const framer = this.container.getElementsByClassName("dynamic-tabs-framer");
+	if (framer.length !== 1) {
+		throw new Error("DynamicTabs: The tabs container must have one element with the class 'dynamic-tabs-framer'");
+	}
+	this.framer = framer[0];
 
-	this.framerShift = 0; // the amount in pixels that the tabs have been scrolled
+	// framerShift is the amount in pixels that the tabs have been scrolled.
+	this.framerShift = 0;
 
 	this.framerWidth = 0;
 
@@ -42,9 +47,8 @@ function DynamicTabs(container) {
 	this.arrowLeft = arrows[0];
 	this.arrowRight = arrows[1];
 
-	this.arrowLeft.addEventListener("click", this.scrollLeft.bind(this, 0.85));
-
-	this.arrowRight.addEventListener("click", this.scrollRight.bind(this, 0.85));
+	this.arrowLeft.addEventListener("click", this.scrollLeft.bind(this));
+	this.arrowRight.addEventListener("click", this.scrollRight.bind(this));
 
 	const ro = new ResizeObserver(this.refreshLayout.bind(this));
 	ro.observe(this.framer);
@@ -54,17 +58,17 @@ function DynamicTabs(container) {
 /**
  * Register tabs identified by their IDs.
  * @param {string[]} tabIDs - The IDs of the tabs to register.
- * @param {string} [idPrefix] - A prefix used with each ID given.
+ * @param {string} [idPrefix=""] - A prefix used with each ID given.
  */
 DynamicTabs.prototype.registerTabs = function(tabIDs, idPrefix = "") {
 
-	if (tabIDs === undefined || tabIDs.length === 0) {
-		console.log("ERROR: Must pass in an array of tab IDs to register")
+	if (!tabIDs || tabIDs.length === 0) {
+		console.error("DynamicTabs: You must pass in an array of tab IDs to register")
 		return;
 	}
 
 	for (let i = 0; i < tabIDs.length; i++) {
-		this.registerTab(document.getElementById(idPrefix+tabIDs[i]))
+		this.registerTab(document.getElementById(idPrefix+tabIDs[i]));
 	}
 
 	// console.log("tabs registered; the object:", this)
@@ -83,7 +87,7 @@ DynamicTabs.prototype.registerAllTabs = function() {
 	const tabs = this.container.getElementsByClassName("dynamic-tab");
 
 	if (tabs.length === 0) {
-		console.log("ERROR: There are no tabs to register");
+		console.error("DynamicTabs: There are no tabs to register");
 		return;
 	}
 
@@ -100,7 +104,7 @@ DynamicTabs.prototype.registerAllTabs = function() {
 /**
  * Register the tab already within the container.
  * @param {HTMLElement} tab - The tab to register.
- * @param {boolean} [refreshLayout] - Whether to refresh the layout after the tab is registered.
+ * @param {boolean} [refreshLayout=false] - Whether to refresh the layout after the tab is registered.
  */
 DynamicTabs.prototype.registerTab = function(tab, refreshLayout = false) {
 
@@ -116,9 +120,9 @@ DynamicTabs.prototype.registerTab = function(tab, refreshLayout = false) {
 	tab.handleEvent = function(e) {
 		if (e.type === "click") {
 			parent.setActiveTabIndex(newTabIndex);
-			for (let i = 0; i < parent.switchCallbacks.length; i++) {
-				parent.switchCallbacks[i](parent.activeTabIndex, newTabIndex);
-			}
+			parent.switchCallbacks.forEach(function(cb) {
+				cb(parent.activeTabIndex, newTabIndex);
+			})
 		}
 	}
 	tab.addEventListener("click", tab);
@@ -201,14 +205,13 @@ DynamicTabs.prototype.setActiveTabIndex = function(newIndex) {
 
 	// If something weird is happening, we don't want an invalid index of an array accessed.
 	if (newIndex >= this.registeredTabs.length) {
-		console.log("ERROR: Invalid tab index failed to set");
+		console.error("DynamicTabs: Invalid tab index failed to set");
 		return;
 	}
 
 	this.activeTabIndex = newIndex;
 	setActiveHighlight.call(this, newIndex);
 	this.scrollToActiveTab(); // Re-position the indicator
-
 	// console.log("this.registeredTabs.length after setActiveTabIndex", this.registeredTabs.length)
 	// console.log("this.activeTabIndex after setActiveTabIndex", this.activeTabIndex)
 
@@ -327,7 +330,8 @@ DynamicTabs.prototype.resetIndicator = function() {
 	let indx = this.activeTabIndex;
 	// Check if the index of the active tab is possible given the current number of registered tabs.
 	if (indx >= this.registeredTabs.length) {
-		// Act as if we were on the tab index of the new last tab, but don't set this tab as active; the app should set the tab index manually.
+		// Behave as if we were on the tab index of the new last tab, but don't set this tab as active;
+		// the app should set the tab index manually.
 		indx = this.registeredTabs.length - 1;
 	}
 	// console.log("|||| RESETTING INDICATOR TO index", indx, " left:", this.framerShift + this.registeredTabs[indx].rect.left)
@@ -406,12 +410,19 @@ DynamicTabs.prototype.scrollRight = function(framerWidths = 0.85) {
 
 }
 
+/**
+ * Set the scrolling offset.
+ * @param {number} offset - The number of pixels that the offset should be.
+ */
 DynamicTabs.prototype.setTabsOffset = function(offset) {
 	this.framerShift = offset;
-	this.registeredTabs[0].el.style["margin-left"] = this.framerShift+"px";
+	this.registeredTabs[0].el.style["margin-left"] = offset+"px";
 }
 
-// specify whether to show the "left" arrow, the "right" arrow, or both (no argument)
+/**
+ * Show either the left or right arrow or both.
+ * @param {string} [leftRightAll="all"]
+ */
 DynamicTabs.prototype.showArrow = function(leftRightAll) {
 	if (leftRightAll === "left") {
 		this.arrowLeft.style.visibility = "";
@@ -423,7 +434,10 @@ DynamicTabs.prototype.showArrow = function(leftRightAll) {
 	}
 }
 
-// specify whether to hide the "left" arrow, the "right" arrow, or both (no argument)
+/**
+ * Hide either the left or right arrow or both.
+ * @param {string} [leftRightAll="all"]
+ */
 DynamicTabs.prototype.hideArrow = function(leftRightAll) {
 	if (leftRightAll === "left") {
 		this.arrowLeft.style.visibility = "hidden";

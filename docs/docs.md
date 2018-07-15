@@ -13,7 +13,7 @@ Register tabs identified by their IDs.
 #### Parameters
 
 -   `tabIDs` **[Array][3]&lt;[string][2]>** The IDs of the tabs to register.
--   `idPrefix` **[string][2]?** A prefix used with each ID given. (optional, default `""`)
+-   `idPrefix` **[string][2]** A prefix used with each ID given. (optional, default `""`)
 
 ### registerAllTabs
 
@@ -26,7 +26,7 @@ Register the tab already within the container.
 #### Parameters
 
 -   `tab` **[HTMLElement][1]** The tab to register.
--   `refreshLayout` **[boolean][4]?** Whether to refresh the layout after the tab is registered. (optional, default `false`)
+-   `refreshLayout` **[boolean][4]** Whether to refresh the layout after the tab is registered. (optional, default `false`)
 
 ### deregisterAllTabs
 
@@ -59,6 +59,30 @@ Scroll right framerWidths widths of the framer.
 #### Parameters
 
 -   `framerWidths` **[number][5]**  (optional, default `0.85`)
+
+### setTabsOffset
+
+Set the scrolling offset.
+
+#### Parameters
+
+-   `offset` **[number][5]** The number of pixels that the offset should be.
+
+### showArrow
+
+Show either the left or right arrow or both.
+
+#### Parameters
+
+-   `leftRightAll` **[string][2]**  (optional, default `"all"`)
+
+### hideArrow
+
+Hide either the left or right arrow or both.
+
+#### Parameters
+
+-   `leftRightAll` **[string][2]**  (optional, default `"all"`)
 
 [1]: https://developer.mozilla.org/docs/Web/HTML/Element
 
