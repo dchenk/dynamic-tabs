@@ -43,6 +43,8 @@ document.getElementById("show-odd").addEventListener("click", () => {
 		return i % 2 === 0;
 	}), "my-tab-");
 	myTabs.addSwitchCallback(handleSwitch);
+	currIndxDisplay.innerHTML = "";
+	currTextDisplay.innerHTML = "";
 });
 
 document.getElementById("show-even").addEventListener("click", () => {
@@ -51,12 +53,16 @@ document.getElementById("show-even").addEventListener("click", () => {
 		return i % 2 !== 0;
 	}), "my-tab-");
 	myTabs.addSwitchCallback(handleSwitch);
+	currIndxDisplay.innerHTML = "";
+	currTextDisplay.innerHTML = "";
 });
 
 document.getElementById("show-all").addEventListener("click", () => {
 	myTabs.deregisterAllTabs();
 	myTabs.registerTabs(tabIDs, "my-tab-");
 	myTabs.addSwitchCallback(handleSwitch);
+	currIndxDisplay.innerHTML = "";
+	currTextDisplay.innerHTML = "";
 });
 
 document.getElementById("deregister-all").addEventListener("click", () => {

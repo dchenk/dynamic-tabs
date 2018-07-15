@@ -2,6 +2,8 @@
 
 ## DynamicTabs
 
+DynamicTabs lets you create awesome dynamic tabs.
+
 ### Parameters
 
 -   `container` **([HTMLElement][1] \| [string][2])** The containing element or the ID of the containing element.
@@ -41,6 +43,14 @@ De-register a tab, removing the click event listener given to it when it was reg
 
 -   `tabIndex` **[number][5]** The index of the tab in the registeredTabs array.
 -   `refreshLayout` **[boolean][4]** Whether to refresh the layout after de-registering the tab. (optional, default `false`)
+
+### setActiveTabIndex
+
+Set the active tab by its index in the registeredTabs array and then scroll to it if necessary.
+
+#### Parameters
+
+-   `newIndex` **[number][5]** 
 
 ### addSwitchCallback
 
@@ -112,6 +122,23 @@ Hide either the left or right arrow or both.
 
 -   `leftRightAll` **[string][2]**  (optional, default `"all"`)
 
+### setActiveHighlight
+
+Set the DOM attribute of the registered tab at tabIndex to mark it as the active tab.
+
+#### Parameters
+
+-   `tabIndex`  
+
+### resetRects
+
+Reset the boundingClientRect info of all registered tabs based on the current layout.
+
+#### Parameters
+
+-   `firstLeft`  
+-   `widths`  
+
 ## tabSwitchCallback
 
 A tabSwitchCallback can be registered using the addSwitchCallback method.
@@ -122,14 +149,7 @@ Type: [Function][7]
 
 -   `previousTabIndex` **[number][5]** 
 -   `nextTabIndex` **[number][5]** 
-
-## setActiveHighlight
-
-Set the DOM attribute of the registered tab at tabIndex to indicate that this is the active tab.
-
-### Parameters
-
--   `tabIndex`  
+-   `clickedTab` **[HTMLElement][1]** 
 
 [1]: https://developer.mozilla.org/docs/Web/HTML/Element
 
