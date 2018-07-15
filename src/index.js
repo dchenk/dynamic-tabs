@@ -218,6 +218,8 @@ DynamicTabs.prototype.addSwitchCallback = function(callback) {
 	this.switchCallbacks.push(callback);
 }
 
+// Private utility functions:
+
 DynamicTabs.prototype.refreshLayout = function() {
 
 	if (this.registeredTabs.length === 0) {
@@ -427,8 +429,6 @@ DynamicTabs.prototype.hideArrow = function(leftRightAll) {
 		this.arrowRight.style.visibility = "hidden";
 	}
 }
-
-// Private utility functions:
 
 // setActiveHighlight marks a registered tab in the DOM as the active one after un-marking the current active
 // tab as active.

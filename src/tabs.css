@@ -19,11 +19,11 @@
 	flex-wrap: nowrap;
 }
 
-.dynamic-tabs .dynamic-tabs-list > :not([data-dtr="y"]) {
+.dynamic-tabs .dynamic-tabs-list :not([data-dtr="y"]) {
 	display: none;
 }
 
-.dynamic-tabs .dynamic-tabs-list > .dynamic-tab {
+.dynamic-tabs .dynamic-tabs-list .dynamic-tab {
 	text-decoration: none;
 	cursor: pointer;
 	color: #757575;
@@ -39,11 +39,11 @@
 	user-select: none;
 }
 
-.dynamic-tabs .dynamic-tabs-list > .dynamic-tab:hover, .dynamic-tabs .dynamic-tabs-list > .dynamic-tab[data-dtactive='a'] {
+.dynamic-tabs .dynamic-tabs-list .dynamic-tab:hover, .dynamic-tabs .dynamic-tabs-list .dynamic-tab[data-dtactive="a"] {
 	color: #212121;
 }
 
-.dynamic-tabs .dynamic-tabs-list > .dynamic-tab:first-child {
+.dynamic-tabs .dynamic-tabs-list .dynamic-tab:first-child {
 	transition: margin-left .25s cubic-bezier(0, 0, .2, 1) 0ms;
 	will-change: margin-left;
 }
@@ -60,7 +60,7 @@
 }
 
 /* in case a material-icon is used */
-.dynamic-tabs .dynamic-tabs-arrow > div.material-icons {
+.dynamic-tabs .dynamic-tabs-arrow div.material-icons {
 	width: 32px;
 	text-align: center;
 	font-size: 24px;
@@ -82,7 +82,7 @@
 }
 
 @media screen and (max-width: 400px) {
-	.dynamic-tabs .dynamic-tabs-list > .dynamic-tab {
+	.dynamic-tabs .dynamic-tabs-list .dynamic-tab {
 		padding: 0 15px;
 	}
 }

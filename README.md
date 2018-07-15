@@ -47,7 +47,7 @@ Create any number of tab elements inside `dynamic-tabs-list` and make sure each 
 
 Look at the file at `docs/index.html` for an example of how to set up the tabs.
 
-## Demo: https://dchenk.github.io/dynamic-tabs
+## Demo: [opensource.widerwebs.com/dynamic-tabs](https://opensource.widerwebs.com/dynamic-tabs/)
 
 ## Methods available on the DynamicTabs object:
 
