@@ -114,22 +114,14 @@ DynamicTabs.prototype.registerTab = function(tab, refreshLayout = false) {
 	// The length of the registeredTabs array will be the index of the new tab.
 	const newTabIndex = this.registeredTabs.length;
 
-	let parent = this;
-
 	// Add click listener to set active tab and fire off callbacks upon switching tabs.
-	tab.handleEvent = function(e) {
-		if (e.type === "click") {
-			parent.setActiveTabIndex(newTabIndex);
-			parent.switchCallbacks.forEach(function(cb) {
-				cb(parent.activeTabIndex, newTabIndex);
-			})
-		}
-	}
-	tab.addEventListener("click", tab);
+	const onClick = this.handleClick.bind(this, newTabIndex);
+	tab.addEventListener("click", onClick);
 
-	// Add the initialized tab.
+	// Add the initialized tab to the end of the registeredTabs array.
 	this.registeredTabs.push({
 		el: tab,
+		oc: onClick,
 		rect: {
 			left: 0,
 			width: 0
@@ -146,7 +138,8 @@ DynamicTabs.prototype.registerTab = function(tab, refreshLayout = false) {
 }
 
 /**
- * De-register all tabs.
+ * De-register all tabs, and remove all tab switch callbacks. If any tabs will be registered again and a tab switch
+ * callback will need to be called, the callback should be registered again using addSwitchCallback.
  */
 DynamicTabs.prototype.deregisterAllTabs = function() {
 	for (let i = this.registeredTabs.length; i > 0; i--) {
@@ -156,26 +149,30 @@ DynamicTabs.prototype.deregisterAllTabs = function() {
 	this.refreshLayout();
 }
 
-// deregisterTab de-registers the tab with the given index: the element's click event listener (and the added callbacks)
-// is removed, the element is hidden from view, and it is removed from the registeredTabs array,
+/**
+ * De-register a tab, removing the click event listener given to it when it was registered, and hide the element from view.
+ * @param {number} tabIndex - The index of the tab in the registeredTabs array.
+ * @param {boolean} [refreshLayout=false] - Whether to refresh the layout after de-registering the tab.
+ */
 DynamicTabs.prototype.deregisterTab = function(tabIndex, refreshLayout = false) {
 
-	// Remove the event listener.
+	const tab = this.registeredTabs[tabIndex];
+
 	// this.registeredTabs[tabIndex].el.removeEventListener("click", this.registeredTabs[tabIndex].oc)
-	this.registeredTabs[tabIndex].el.removeEventListener("click", this.registeredTabs[tabIndex].el);
+	tab.el.removeEventListener("click", tab.oc);
 
 	// Remove the "data-dtr" attribute to hide the tab from view.
-	this.registeredTabs[tabIndex].el.removeAttribute("data-dtr");
+	tab.el.removeAttribute("data-dtr");
 
 	// Remove the active attribute (in case it is active).
-	this.registeredTabs[tabIndex].el.removeAttribute("data-dtactive");
+	tab.el.removeAttribute("data-dtactive");
 
-	const ml = this.registeredTabs[tabIndex].el.style["margin-left"];
+	const ml = tab.el.style["margin-left"];
 	if (ml !== "0px" && ml !== "") {
-		this.registeredTabs[tabIndex].el.style["margin-left"] = "0px";
+		tab.el.style["margin-left"] = "0px";
 	}
 
-	// Splice the element out of the array.
+	// Remove the element from the array.
 	this.registeredTabs.splice(tabIndex, 1);
 
 	if (this.registeredTabs.length === 0) {
@@ -218,8 +215,15 @@ DynamicTabs.prototype.setActiveTabIndex = function(newIndex) {
 }
 
 /**
- * Provide a callback function
- * @param callback - The callback to call after each tab switch.
+ * A tabSwitchCallback can be registered using the addSwitchCallback method.
+ * @callback tabSwitchCallback
+ * @param {number} previousTabIndex
+ * @param {number} nextTabIndex
+ */
+
+/**
+ * Add a callback function to be called after each tab switch.
+ * @param {tabSwitchCallback} callback
  */
 DynamicTabs.prototype.addSwitchCallback = function(callback) {
 	this.switchCallbacks.push(callback);
@@ -227,6 +231,23 @@ DynamicTabs.prototype.addSwitchCallback = function(callback) {
 
 // Private utility functions:
 
+/**
+ * handleClick is the click event callback given to each tab upon registration.
+ * This event callback is removed when the tab is de-registered.
+ * This function must not be called from anywhere directly.
+ * @param {number} tabIndex - The index of the clicked tab.
+ */
+DynamicTabs.prototype.handleClick = function(tabIndex) {
+	const prev = this.activeTabIndex;
+	this.setActiveTabIndex(tabIndex);
+	this.switchCallbacks.forEach(function(cb) {
+		cb(prev, tabIndex);
+	})
+}
+
+/**
+ * Refresh the entire layout of the tabs.
+ */
 DynamicTabs.prototype.refreshLayout = function() {
 
 	if (this.registeredTabs.length === 0) {
@@ -262,6 +283,9 @@ DynamicTabs.prototype.refreshLayout = function() {
 
 }
 
+/**
+ * Scroll within the tabs container so that the active tab is visible.
+ */
 DynamicTabs.prototype.scrollToActiveTab = function() {
 
 	// Return if there's no need to scroll anywhere.
@@ -449,8 +473,10 @@ DynamicTabs.prototype.hideArrow = function(leftRightAll) {
 	}
 }
 
-// setActiveHighlight marks a registered tab in the DOM as the active one after un-marking the current active
-// tab as active.
+/**
+ * Set the DOM attribute of the registered tab at tabIndex to indicate that this is the active tab.
+ * @param tabIndex
+ */
 function setActiveHighlight(tabIndex) {
 	// If the array of registered tabs either has not changed or got changed but has the same number of tabs,
 	// must check to not try to set out of range tab index as not active.
@@ -462,20 +488,12 @@ function setActiveHighlight(tabIndex) {
 
 // resetRects resets the boundingClientRect info of all registered tabs.
 function resetRects(firstLeft, widths) {
-	// first, set the first tab manually because its left must be 0
-	setNewRect.call(this, 0, {left: firstLeft, width: widths[0]});
-	// adjust all the other tabs
+	// Set the first tab manually because its left must be firstLeft.
+	this.registeredTabs[0].rect = {left: firstLeft, width: widths[0]};
+	// Adjust the other tabs.
 	for (let i = 1, tabsLen = this.registeredTabs.length; i < tabsLen; i++) {
-		setNewRect.call(this, i, {left: this.registeredTabs[i-1].rect.left + this.registeredTabs[i-1].rect.width, width: widths[i]});
+		this.registeredTabs[i].rect = {left: this.registeredTabs[i-1].rect.left + this.registeredTabs[i-1].rect.width, width: widths[i]};
 	}
-}
-
-// setNewRect replaces a registered tab by the array splice method (to make the mutation watchable from outside).
-function setNewRect(tabIndex, rect) {
-	this.registeredTabs.splice(tabIndex, 1, {
-		el: this.registeredTabs[tabIndex].el,
-		rect: rect
-	})
 }
 
 export default DynamicTabs;

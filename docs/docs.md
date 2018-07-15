@@ -30,15 +30,43 @@ Register the tab already within the container.
 
 ### deregisterAllTabs
 
-De-register all tabs.
+De-register all tabs, and remove all tab switch callbacks. If any tabs will be registered again and a tab switch
+callback will need to be called, the callback should be registered again using addSwitchCallback.
 
-### addSwitchCallback
+### deregisterTab
 
-Provide a callback function
+De-register a tab, removing the click event listener given to it when it was registered, and hide the element from view.
 
 #### Parameters
 
--   `callback`  The callback to call after each tab switch.
+-   `tabIndex` **[number][5]** The index of the tab in the registeredTabs array.
+-   `refreshLayout` **[boolean][4]** Whether to refresh the layout after de-registering the tab. (optional, default `false`)
+
+### addSwitchCallback
+
+Add a callback function to be called after each tab switch.
+
+#### Parameters
+
+-   `callback` **[tabSwitchCallback][6]** 
+
+### handleClick
+
+handleClick is the click event callback given to each tab upon registration.
+This event callback is removed when the tab is de-registered.
+This function must not be called from anywhere directly.
+
+#### Parameters
+
+-   `tabIndex` **[number][5]** The index of the clicked tab.
+
+### refreshLayout
+
+Refresh the entire layout of the tabs.
+
+### scrollToActiveTab
+
+Scroll within the tabs container so that the active tab is visible.
 
 ### resetIndicator
 
@@ -84,6 +112,25 @@ Hide either the left or right arrow or both.
 
 -   `leftRightAll` **[string][2]**  (optional, default `"all"`)
 
+## tabSwitchCallback
+
+A tabSwitchCallback can be registered using the addSwitchCallback method.
+
+Type: [Function][7]
+
+### Parameters
+
+-   `previousTabIndex` **[number][5]** 
+-   `nextTabIndex` **[number][5]** 
+
+## setActiveHighlight
+
+Set the DOM attribute of the registered tab at tabIndex to indicate that this is the active tab.
+
+### Parameters
+
+-   `tabIndex`  
+
 [1]: https://developer.mozilla.org/docs/Web/HTML/Element
 
 [2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
@@ -93,3 +140,7 @@ Hide either the left or right arrow or both.
 [4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
 [5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[6]: #tabswitchcallback
+
+[7]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
