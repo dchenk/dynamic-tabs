@@ -51,8 +51,11 @@ function DynamicTabs(container) {
 
 }
 
-// registerTabs registers the tabs with the IDs in the tabsIDs array. The optional idPrefix parameter can be set
-// to prefix each targeted tab element by ID with the string.
+/**
+ * Register tabs identified by their IDs.
+ * @param {string[]} tabIDs - The IDs of the tabs to register.
+ * @param {string} [idPrefix] - A prefix used with each ID given.
+ */
 DynamicTabs.prototype.registerTabs = function(tabIDs, idPrefix = "") {
 
 	if (tabIDs === undefined || tabIDs.length === 0) {
@@ -72,8 +75,9 @@ DynamicTabs.prototype.registerTabs = function(tabIDs, idPrefix = "") {
 
 }
 
-// registerAllTabs registers all tabs (elements inside of the container that have the class "dynamic-tab") and
-// refreshes the layout.
+/**
+ * Register all tabs found in the container, which is just elements with the class "dynamic-tab", and refresh the layout.
+ */
 DynamicTabs.prototype.registerAllTabs = function() {
 
 	const tabs = this.container.getElementsByClassName("dynamic-tab")
@@ -93,7 +97,11 @@ DynamicTabs.prototype.registerAllTabs = function() {
 
 }
 
-// registerTab registers the passed in the HTML tab element.
+/**
+ * Register the tab already within the container.
+ * @param {HTMLElement} tab - The tab to register.
+ * @param {boolean} [refreshLayout] - Whether to refresh the layout after the tab is registered.
+ */
 DynamicTabs.prototype.registerTab = function(tab, refreshLayout = false) {
 
 	// Remove the display:none style property that is by default on unregistered tabs.
@@ -133,8 +141,9 @@ DynamicTabs.prototype.registerTab = function(tab, refreshLayout = false) {
 
 }
 
-// deregisterAllTabs de-registers all tabs. Look at function deregisterTab to understand what it means
-// to de-register a tab.
+/**
+ * De-register all tabs.
+ */
 DynamicTabs.prototype.deregisterAllTabs = function() {
 	for (let i = this.registeredTabs.length; i > 0; i--) {
 		this.deregisterTab(0);
