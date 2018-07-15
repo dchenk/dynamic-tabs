@@ -80,10 +80,10 @@ DynamicTabs.prototype.registerTabs = function(tabIDs, idPrefix = "") {
  */
 DynamicTabs.prototype.registerAllTabs = function() {
 
-	const tabs = this.container.getElementsByClassName("dynamic-tab")
+	const tabs = this.container.getElementsByClassName("dynamic-tab");
 
 	if (tabs.length === 0) {
-		console.log("ERROR: There are no tabs to register")
+		console.log("ERROR: There are no tabs to register");
 		return;
 	}
 
@@ -214,6 +214,10 @@ DynamicTabs.prototype.setActiveTabIndex = function(newIndex) {
 
 }
 
+/**
+ * Provide a callback function
+ * @param callback - The callback to call after each tab switch.
+ */
 DynamicTabs.prototype.addSwitchCallback = function(callback) {
 	this.switchCallbacks.push(callback);
 }
@@ -316,6 +320,9 @@ DynamicTabs.prototype.scrollToActiveTab = function() {
 
 }
 
+/**
+ * Reset the indicator bar offset and width.
+ */
 DynamicTabs.prototype.resetIndicator = function() {
 	let indx = this.activeTabIndex;
 	// Check if the index of the active tab is possible given the current number of registered tabs.
@@ -332,30 +339,29 @@ DynamicTabs.prototype.resetIndicator = function() {
 	this.indicatorBar.style.width = this.registeredTabs[indx].rect.width + "px";
 }
 
-// scroll left n frameWidths; frameWidths defaults to 0.85 if undefined
-DynamicTabs.prototype.scrollLeft = function(framerWidths) {
+/**
+ * Scroll left framerWidths widths of the framer.
+ * @param {number} [framerWidths=0.85]
+ */
+DynamicTabs.prototype.scrollLeft = function(framerWidths = 0.85) {
 
-	if (framerWidths === undefined) {
-		framerWidths = 0.85;
-	}
-
-	let pixelsToShift = framerWidths * this.framerWidth;
-
-	// if at left edge, don't scroll
+	// If at left edge, don't scroll.
 	if (this.framerShift >= 0) {
 		return;
 	}
 
+	const pixelsToShift = framerWidths * this.framerWidth;
+
 	if (Math.abs(this.framerShift) > pixelsToShift) {
 
-		// scroll left pixelsToShift
-		this.setTabsOffset(this.framerShift + pixelsToShift)
+		// Scroll left pixelsToShift.
+		this.setTabsOffset(this.framerShift + pixelsToShift);
 
 	} else {
 
-		// scroll to the left edge
-		this.setTabsOffset(0)
-		this.hideArrow("left")
+		// Scroll to the left edge.
+		this.setTabsOffset(0);
+		this.hideArrow("left");
 
 	}
 
@@ -365,33 +371,32 @@ DynamicTabs.prototype.scrollLeft = function(framerWidths) {
 
 }
 
-// scroll the the right n frameWidths; frameWidths defaults to 0.85 if undefined
-DynamicTabs.prototype.scrollRight = function(framerWidths) {
+/**
+ * Scroll right framerWidths widths of the framer.
+ * @param {number} [framerWidths=0.85]
+ */
+DynamicTabs.prototype.scrollRight = function(framerWidths = 0.85) {
 
-	if (framerWidths === undefined) {
-		framerWidths = 0.85;
-	}
-
-	let pixelsToShift = framerWidths * this.framerWidth;
-
-	// the number of pixels that you can still scroll to the right
+	// canShift is the number of pixels that you can still scroll to the right.
 	const canShift = Math.abs(this.totalTabsWidth - this.framerWidth + this.framerShift);
 
-	// if at right edge, don't scroll
+	// If at right edge, don't scroll.
 	if (canShift <= 0) {
 		return;
 	}
 
+	const pixelsToShift = framerWidths * this.framerWidth;
+
 	if (canShift > pixelsToShift) {
 
-		// scroll right pixelsToShift
-		this.setTabsOffset(this.framerShift - pixelsToShift)
+		// Scroll right pixelsToShift.
+		this.setTabsOffset(this.framerShift - pixelsToShift);
 
 	} else {
 
-		// scroll to the right edge
-		this.setTabsOffset(-(this.totalTabsWidth - this.framerWidth))
-		this.hideArrow("right")
+		// Scroll to the right edge.
+		this.setTabsOffset(-(this.totalTabsWidth - this.framerWidth));
+		this.hideArrow("right");
 
 	}
 
@@ -447,7 +452,7 @@ function resetRects(firstLeft, widths) {
 	setNewRect.call(this, 0, {left: firstLeft, width: widths[0]});
 	// adjust all the other tabs
 	for (let i = 1, tabsLen = this.registeredTabs.length; i < tabsLen; i++) {
-		setNewRect.call(this, i, {left: this.registeredTabs[i-1].rect.left + this.registeredTabs[i-1].rect.width, width: widths[i]})
+		setNewRect.call(this, i, {left: this.registeredTabs[i-1].rect.left + this.registeredTabs[i-1].rect.width, width: widths[i]});
 	}
 }
 
@@ -455,7 +460,6 @@ function resetRects(firstLeft, widths) {
 function setNewRect(tabIndex, rect) {
 	this.registeredTabs.splice(tabIndex, 1, {
 		el: this.registeredTabs[tabIndex].el,
-		// oc: this.registeredTabs[tabIndex].oc,
 		rect: rect
 	})
 }

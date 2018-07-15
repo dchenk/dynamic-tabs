@@ -32,6 +32,34 @@ Register the tab already within the container.
 
 De-register all tabs.
 
+### addSwitchCallback
+
+Provide a callback function
+
+#### Parameters
+
+-   `callback`  The callback to call after each tab switch.
+
+### resetIndicator
+
+Reset the indicator bar offset and width.
+
+### scrollLeft
+
+Scroll left framerWidths widths of the framer.
+
+#### Parameters
+
+-   `framerWidths` **[number][5]**  (optional, default `0.85`)
+
+### scrollRight
+
+Scroll right framerWidths widths of the framer.
+
+#### Parameters
+
+-   `framerWidths` **[number][5]**  (optional, default `0.85`)
+
 [1]: https://developer.mozilla.org/docs/Web/HTML/Element
 
 [2]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
@@ -39,3 +67,5 @@ De-register all tabs.
 [3]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
 [4]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[5]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number

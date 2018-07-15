@@ -20,7 +20,7 @@ document.getElementById("my-tab-second").addEventListener("click", function () {
 // Create the object of the container element by ID.
 let myTabs = new DynamicTabs("section-tabs");
 
-// Copy DynamicTabs object to window for access in the console (for the example only).
+// Copy the DynamicTabs object to window for access in the console (for the example only).
 window.myTabs = myTabs;
 
 // Register all tabs (inside the container), which are identified by having the class "dynamic-tab".
