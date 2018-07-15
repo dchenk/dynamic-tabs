@@ -158,13 +158,12 @@ DynamicTabs.prototype.deregisterTab = function(tabIndex, refreshLayout = false) 
 
 	const tab = this.registeredTabs[tabIndex];
 
-	// this.registeredTabs[tabIndex].el.removeEventListener("click", this.registeredTabs[tabIndex].oc)
 	tab.el.removeEventListener("click", tab.oc);
 
 	// Remove the "data-dtr" attribute to hide the tab from view.
 	tab.el.removeAttribute("data-dtr");
 
-	// Remove the active attribute (in case it is active).
+	// Remove the active attribute (in case the tab is active).
 	tab.el.removeAttribute("data-dtactive");
 
 	const ml = tab.el.style["margin-left"];
@@ -219,6 +218,7 @@ DynamicTabs.prototype.setActiveTabIndex = function(newIndex) {
  * @callback tabSwitchCallback
  * @param {number} previousTabIndex
  * @param {number} nextTabIndex
+ * @param {HTMLElement} clickedTab
  */
 
 /**
@@ -240,8 +240,9 @@ DynamicTabs.prototype.addSwitchCallback = function(callback) {
 DynamicTabs.prototype.handleClick = function(tabIndex) {
 	const prev = this.activeTabIndex;
 	this.setActiveTabIndex(tabIndex);
+	const t = this.registeredTabs[tabIndex].el;
 	this.switchCallbacks.forEach(function(cb) {
-		cb(prev, tabIndex);
+		cb(prev, tabIndex, t);
 	})
 }
 

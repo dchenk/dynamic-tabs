@@ -6,9 +6,9 @@ const tabIDs = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh
 let currIndxDisplay = document.getElementById("current-indx"),
 	currTextDisplay = document.getElementById("current-text");
 
-function handleSwitch(oldIndx, newIndx) {
+function handleSwitch(oldIndx, newIndx, newTab) {
 	currIndxDisplay.innerHTML = newIndx;
-	currTextDisplay.innerHTML = document.getElementById("my-tab-"+tabIDs[newIndx]).innerText;
+	currTextDisplay.innerHTML = newTab.innerText;
 }
 
 // Sample click handler attached as if by an external application.
@@ -42,6 +42,7 @@ document.getElementById("show-odd").addEventListener("click", () => {
 	myTabs.registerTabs(tabIDs.filter((x, i) => {
 		return i % 2 === 0;
 	}), "my-tab-");
+	myTabs.addSwitchCallback(handleSwitch);
 });
 
 document.getElementById("show-even").addEventListener("click", () => {
@@ -49,11 +50,13 @@ document.getElementById("show-even").addEventListener("click", () => {
 	myTabs.registerTabs(tabIDs.filter((x, i) => {
 		return i % 2 !== 0;
 	}), "my-tab-");
+	myTabs.addSwitchCallback(handleSwitch);
 });
 
 document.getElementById("show-all").addEventListener("click", () => {
 	myTabs.deregisterAllTabs();
 	myTabs.registerTabs(tabIDs, "my-tab-");
+	myTabs.addSwitchCallback(handleSwitch);
 });
 
 document.getElementById("deregister-all").addEventListener("click", () => {
