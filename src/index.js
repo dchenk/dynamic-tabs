@@ -57,8 +57,10 @@ export default class DynamicTabs {
 		this.arrowLeft.innerHTML = navIcon;
 		this.arrowRight.innerHTML = navIcon;
 
-		this.arrowLeft.addEventListener("click", this.scrollLeft.bind(this));
-		this.arrowRight.addEventListener("click", this.scrollRight.bind(this));
+		// Register the arrow click event listeners, and specify 0.85 framerWidths as the first argument explicitly, because
+		// otherwise the first argument passed in to the click handler is the Event object.
+		this.arrowLeft.addEventListener("click", this.scrollLeft.bind(this, 0.85));
+		this.arrowRight.addEventListener("click", this.scrollRight.bind(this, 0.85));
 
 		const ro = new ResizeObserver(this.refreshLayout.bind(this));
 		ro.observe(this.framer);
@@ -391,7 +393,7 @@ export default class DynamicTabs {
 
 		const pixelsToShift = framerWidths * this.framerWidth;
 
-		if (Math.abs(this.framerShift) > pixelsToShift) {
+		if (this.framerShift < -pixelsToShift) {
 
 			// Scroll left pixelsToShift.
 			this.setTabsOffset(this.framerShift + pixelsToShift);
@@ -418,7 +420,8 @@ export default class DynamicTabs {
 	scrollRight(framerWidths = 0.85) {
 
 		// canShift is the number of pixels that you can still scroll to the right.
-		const canShift = Math.abs(this.totalTabsWidth - this.framerWidth + this.framerShift);
+		// Here we must add this.framerShift to incorporate any scrolling to the right already done.
+		const canShift = this.totalTabsWidth - this.framerWidth + this.framerShift;
 
 		// If at right edge, don't scroll.
 		if (canShift <= 0) {
@@ -435,7 +438,7 @@ export default class DynamicTabs {
 		} else {
 
 			// Scroll to the right edge.
-			this.setTabsOffset(-(this.totalTabsWidth - this.framerWidth));
+			this.setTabsOffset(this.framerWidth - this.totalTabsWidth);
 			this.hideArrow("right");
 
 		}
