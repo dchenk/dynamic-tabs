@@ -20,32 +20,29 @@ import "dynamic-tabs/dist/tabs.css"
 The tabs component requires HTML markup with this kind of layout and these CSS classes:
 ```
 <div id="section-tabs" class="dynamic-tabs">
-    <div class="dynamic-tabs-arrow"><div class="material-icons" aria-label="scroll left">navigate_before</div></div>
+    <div class="dynamic-tabs-arrow"></div>
     <div class="dynamic-tabs-framer">
         <nav class="dynamic-tabs-list">
-            <div class="dynamic-tab" id="my-tab-first">FIRST</div>
-            <div class="dynamic-tab" id="my-tab-second">THE SECOND</div>
-            <div class="dynamic-tab" id="my-tab-third">THIRD THING</div>
-            <div class="dynamic-tab" id="my-tab-fourth">FOURTH</div>
-            <div class="dynamic-tab" id="my-tab-fifth">FIVE</div>
-            <div class="dynamic-tab" id="my-tab-sixth">ELEMENT SIX</div>
-            <div class="dynamic-tab" id="my-tab-seventh">SEVENTH</div>
+            <div class="dynamic-tab">FIRST</div>
+            <div class="dynamic-tab">THE SECOND</div>
+            <div class="dynamic-tab">THIRD THING</div>
+            <div class="dynamic-tab">FOURTH</div>
+            <div class="dynamic-tab">FIVE</div>
+            <div class="dynamic-tab">ELEMENT SIX</div>
+            <div class="dynamic-tab">SEVENTH</div>
         </nav>
         <div class="dynamic-tabs-indicator"><div class="dt-indicator-bar"></div></div>
     </div>
-    <div class="dynamic-tabs-arrow"><div class="material-icons" aria-label="scroll right">navigate_next</div></div>
+    <div class="dynamic-tabs-arrow"></div>
 </div>
 ```
-There needs to be a wrapping element with a `dynamic-tabs` class; an element as shown with class `dynamic-tabs-arrow`; a wrapper of the tabs with class `dynamic-tabs-list` containing direct children each with the class `dynamic-tab`; and after (and outside) that a `<div class="dynamic-tabs-indicator"><div class="dt-indicator-bar"></div></div>` element; and then outside of that an element as shown with the class `dynamic-tabs-arrow`.
-
-Currently, if you're using this exact HTML markup, you need to also include `<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">` in the document head.
-In the next big release the left and right arrow icons will be inserted automatically, so this dependency won't be needed.
+There needs to be a wrapping element with a `dynamic-tabs` class; an element as shown with class `dynamic-tabs-arrow`; a wrapper of the tabs with class `dynamic-tabs-list` containing children each with the class `dynamic-tab`; and after (and outside) that a `<div class="dynamic-tabs-indicator"><div class="dt-indicator-bar"></div></div>` element; and then outside of that an element as shown with the class `dynamic-tabs-arrow`.
 
 To register the container of the tabs (here it is the div with `id="section-tabs"`), create the tabs object using the `new` keyword: `const myTabs = new DynamicTabs(container-ID)`.
 
 Create any number of tab elements inside `dynamic-tabs-list` and make sure each tab has the class `dynamic-tab`. If you'll be initializing them by providing an array of IDs to the `DynamicTabs` constructor function, then each of the tabs will need an ID. Each tab needs to be registered.
 
-Look at the file at `docs/index.html` for an example of how to set up the tabs.
+Look at the file at [docs/index.html](https://github.com/dchenk/dynamic-tabs/blob/master/docs/index.html) for an example of how you can set up the tabs.
 
 ## Demo: [opensource.widerwebs.com/dynamic-tabs](https://opensource.widerwebs.com/dynamic-tabs/)
 
@@ -88,9 +85,10 @@ hideArrow(leftRightAll: Enum("left", "right", "all"))
 
 ## Goal and Features
 
-This library is intended to be extremely lightweight. It thus loads fast and works smoothly. The animations are kept at the
-CSS level where possible to ensure that the JavaScript thread is not used as much.
+This library is intended to be extremely lightweight so that it loads fast and works smoothly on all devices. The required
+HTML is fairly minimal, and the animations are kept at the CSS level where possible to ensure that the JavaScript thread is
+not used as much. Needless to say, the tabs are fully responsive on all screens and work on all popular browsers.
 
 Why use the word *dynamic* in the name? It's not just about how the switching between the tabs works with the indicator bar
-sliding with a smooth animation from tab to tab. The entire tabs component dynamically reacts to changes in its size, such
-as when the window width changes or the container's parent element's size changes.
+sliding with a smooth animation from tab to tab. The point is that the entire tabs component dynamically reacts to changes
+in its size, such as when the window's or the container's parent element's width changes.
