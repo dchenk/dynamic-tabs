@@ -234,13 +234,14 @@ export default class DynamicTabs {
 		this.switchCallbacks.push(callback);
 	}
 
-// Private utility functions:
+	// Private utility functions:
 
 	/**
 	 * handleClick is the click event callback given to each tab upon registration.
 	 * This event callback is removed when the tab is de-registered.
 	 * This function must not be called from anywhere directly.
 	 * @param {number} tabIndex - The index of the clicked tab.
+	 * @private
 	 */
 	handleClick(tabIndex) {
 		const prev = this.activeTabIndex;
@@ -253,6 +254,7 @@ export default class DynamicTabs {
 
 	/**
 	 * Refresh the entire layout of the tabs.
+	 * @private
 	 */
 	refreshLayout() {
 
@@ -291,6 +293,7 @@ export default class DynamicTabs {
 
 	/**
 	 * Scroll within the tabs container so that the active tab is visible.
+	 * @private
 	 */
 	scrollToActiveTab() {
 
@@ -355,6 +358,7 @@ export default class DynamicTabs {
 
 	/**
 	 * Reset the indicator bar offset and width.
+	 * @private
 	 */
 	resetIndicator() {
 		let indx = this.activeTabIndex;
@@ -376,6 +380,7 @@ export default class DynamicTabs {
 	/**
 	 * Scroll left framerWidths widths of the framer.
 	 * @param {number} [framerWidths=0.85]
+	 * @private
 	 */
 	scrollLeft(framerWidths = 0.85) {
 
@@ -408,6 +413,7 @@ export default class DynamicTabs {
 	/**
 	 * Scroll right framerWidths widths of the framer.
 	 * @param {number} [framerWidths=0.85]
+	 * @private
 	 */
 	scrollRight(framerWidths = 0.85) {
 
@@ -443,6 +449,7 @@ export default class DynamicTabs {
 	/**
 	 * Set the scrolling offset.
 	 * @param {number} offset - The number of pixels that the offset should be.
+	 * @private
 	 */
 	setTabsOffset(offset) {
 		this.framerShift = offset;
@@ -452,6 +459,7 @@ export default class DynamicTabs {
 	/**
 	 * Show either the left or right arrow or both.
 	 * @param {string} [leftRightAll="all"]
+	 * @private
 	 */
 	showArrow(leftRightAll) {
 		if (leftRightAll === "left") {
@@ -467,6 +475,7 @@ export default class DynamicTabs {
 	/**
 	 * Hide either the left or right arrow or both.
 	 * @param {string} [leftRightAll="all"]
+	 * @private
 	 */
 	hideArrow(leftRightAll) {
 		if (leftRightAll === "left") {
@@ -482,6 +491,7 @@ export default class DynamicTabs {
 	/**
 	 * Set the DOM attribute of the registered tab at tabIndex to mark it as the active tab.
 	 * @param tabIndex
+	 * @private
 	 */
 	setActiveHighlight(tabIndex) {
 		// If the array of registered tabs either has not changed or got changed but has the same number of tabs,
@@ -496,6 +506,7 @@ export default class DynamicTabs {
 	 * Reset the boundingClientRect info of all registered tabs based on the current layout.
 	 * @param firstLeft
 	 * @param widths
+	 * @private
 	 */
 	resetRects(firstLeft, widths) {
 		// Set the first tab manually because its left must be firstLeft.

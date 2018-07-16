@@ -53,9 +53,9 @@ Look at the file at [docs/index.html](https://github.com/dchenk/dynamic-tabs/blo
 
 **Complete documentation** is available at [docs/docs.md](https://github.com/dchenk/dynamic-tabs/blob/master/docs/docs.md)
 
-Some methods of the DynamicTabs class are marked as private (such as `refreshLayout` and `scrollLeft`), and they are used
-internally by the class to implement all the cool dynamic magic. If you find yourself needing to use any of these, please
-file an issue.
+Some methods of the DynamicTabs class are marked as private within the code (such as `refreshLayout` and `scrollLeft`); they
+are used internally by the class to implement all the cool dynamic magic. If you find yourself needing to use any of these,
+please file an issue.
 
 ## Goal and Features
 

@@ -7,7 +7,7 @@
     "build": "webpack --mode production --config build/webpack.prod.config.js",
     "demo": "webpack --mode production --config build/webpack.demo.config.js",
     "dev": "webpack-dev-server --mode development --open --config build/webpack.dev.config.js",
-    "docs": "documentation build src/index.js -f md --shallow --markdown-toc=false --np -o=docs/docs.md",
+    "docs": "documentation build src/index.js -f md --shallow --markdown-toc=false --np -a undefined -a private -o=docs/docs.md",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
