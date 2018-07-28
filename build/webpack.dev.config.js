@@ -5,8 +5,8 @@ const baseWebpackConfig = require("./webpack.base.config");
 module.exports = merge(baseWebpackConfig, {
 	entry: "./docs/demo.js",
 	output: {
-		path: path.resolve("./", "dist"),
-		filename: "dev-bundle.js"
+		path: path.resolve("./", "docs"),
+		filename: "built-bundle.js"
 	},
 	module:{
 		rules: [
@@ -24,8 +24,10 @@ module.exports = merge(baseWebpackConfig, {
 		]
 	},
 	devServer: {
-		contentBase: "./",
-		publicPath: "/dist",
-		watchContentBase: true
+		contentBase: "./docs/",
+		publicPath: "/",
+		openPage: "working.html",
+		watchContentBase: true,
+		open: true
 	}
 });

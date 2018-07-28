@@ -12,8 +12,8 @@ function handleSwitch(oldIndx, newIndx, newTab) {
 }
 
 // Sample click handler attached as if by an external application.
-// This click event listener will not be removed when the tab is deregistered.
-document.getElementById("my-tab-second").addEventListener("click", function () {
+// This click event listener will not be removed when the tab is de-registered.
+document.getElementById("my-tab-second").addEventListener("click", () => {
 	console.log("click handled on second tab (before register)");
 });
 
@@ -32,8 +32,8 @@ myTabs.addSwitchCallback(handleSwitch);
 // Other stuff just for the example
 
 // Another sample click handler attached as if by an external application (after tabs are registered).
-// This click event listener will not be removed when the tab is deregistered.
-document.getElementById("my-tab-second").addEventListener("click", function () {
+// This click event listener will not be removed when the tab is de-registered.
+document.getElementById("my-tab-second").addEventListener("click", () => {
 	console.log("click handled on second tab (after register)");
 });
 
