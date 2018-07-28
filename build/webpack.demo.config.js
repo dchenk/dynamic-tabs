@@ -6,12 +6,13 @@ const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const HtmlWebpackStringReplacePlugin = require("html-webpack-string-replace-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 module.exports = merge(baseWebpackConfig, {
 	entry: "./docs/demo.js",
 	output: {
 		path: path.resolve("./", "docs"),
-		filename: "built-bundle-[contenthash].js"
+		filename: "bundle-[contenthash].js"
 	},
 	optimization: {
 		minimizer: [
@@ -35,8 +36,9 @@ module.exports = merge(baseWebpackConfig, {
 		]
 	},
 	plugins: [
+		new CleanWebpackPlugin(["docs/bundle-*"], {root: path.dirname(__dirname)}),
 		new MiniCssExtractPlugin({
-			filename: "demo-[contenthash].css"
+			filename: "bundle-[contenthash].css"
 		}),
 		new HtmlWebpackPlugin({
 			template: "docs/working.html",
