@@ -222,7 +222,7 @@ export default class DynamicTabs {
 
 		this.activeTabIndex = newIndex;
 		this.setActiveHighlight(newIndex);
-		this.scrollToActiveTab(); // Re-position the indicator
+		this.scrollToActiveTab();
 		// console.log("this.registeredTabs.length after setActiveTabIndex", this.registeredTabs.length)
 		// console.log("this.activeTabIndex after setActiveTabIndex", this.activeTabIndex)
 

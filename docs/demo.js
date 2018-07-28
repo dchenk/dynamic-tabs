@@ -1,5 +1,7 @@
-import DynamicTabs from "../src/index.js";
-import "../src/tabs.css";
+import DynamicTabs from "../src/index.js"; // required JavaScript source
+import "../src/tabs.css"; // required stylesheet
+
+import "./demo.css";
 
 const tabIDs = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
 

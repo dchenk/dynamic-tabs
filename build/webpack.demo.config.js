@@ -11,7 +11,7 @@ module.exports = merge(baseWebpackConfig, {
 	entry: "./docs/demo.js",
 	output: {
 		path: path.resolve("./", "docs"),
-		filename: "built-bundle-[hash].js"
+		filename: "built-bundle-[contenthash].js"
 	},
 	optimization: {
 		minimizer: [
@@ -36,7 +36,7 @@ module.exports = merge(baseWebpackConfig, {
 	},
 	plugins: [
 		new MiniCssExtractPlugin({
-			filename: "demo-[hash].css"
+			filename: "demo-[contenthash].css"
 		}),
 		new HtmlWebpackPlugin({
 			template: "docs/working.html",
